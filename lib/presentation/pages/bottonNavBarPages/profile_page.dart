@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
-import 'package:stroy_baza/core/router/router.dart';
-import 'package:stroy_baza/presentation/pages/profile_screen.dart';
+import 'package:stroy_baza/presentation/pages/orders_screen.dart';
+import 'package:stroy_baza/presentation/pages/payment_screen.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -109,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => ProfileScreen()));
+              MaterialPageRoute(builder: (context) => PaymentScreen()));
         },
       ),
     );
