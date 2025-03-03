@@ -10,4 +10,7 @@ class AssetsModel {
   static const payme = '$images/payme.png';
   static const mudatli_tolov = '$images/mudatli_tolov.png';
   static const alif = '$images/alif.png';
+  static const solfy='$images/solfy.png';
+  static const anor='$images/anor.png';
+  static const uzum='$images/uzum.png';
 }
