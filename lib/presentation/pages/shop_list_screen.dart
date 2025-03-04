@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:stroy_baza/presentation/pages/orders_screen.dart';
 import 'package:stroy_baza/presentation/widgets/map_widget.dart';
-
 
 class ShopListScreen extends StatefulWidget {
   @override
   _ShopListScreenState createState() => _ShopListScreenState();
-  static const routeName='/shop-list-screen';
+  static const routeName = '/shop-list-screen';
 }
 
 class _ShopListScreenState extends State<ShopListScreen> {
@@ -15,79 +13,139 @@ class _ShopListScreenState extends State<ShopListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0xFFD1B07A),
-        title: Text(isMap?"Xarita" :"Do'konlar", style: TextStyle(color: Colors.black)),
+        backgroundColor: const Color(0xFFDEB887),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
-        elevation: 0, // 0 qilamiz
-        actions: [
-          IconButton(
-            icon: Icon(Icons.map, color: Colors.black),
-            onPressed: () {
-              setState(() {
-                isMap = true;
-              });
-            },
+        title: const Text(
+          'Do\'konlar',
+          style: TextStyle(color: Colors.black),
+        ),
+        elevation: 0,
+      ),
+      body: Column(
+        children: [
+          Container(
+            color: Colors.white,
+            padding:
+                const EdgeInsets.only(top: 16, bottom: 8, left: 30, right: 30),
+            child: Row(
+              children: [
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => isMap = false),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Ro\'yxat',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          width: 80,
+                          height: 2,
+                          color: !isMap
+                              ? const Color(0xFFDEB887)
+                              : Colors.transparent,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => setState(() => isMap = true),
+                    child: Column(
+                      children: [
+                        const Text(
+                          'Xarita',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Container(
+                          height: 2,
+                          width: 80,
+                          color: isMap
+                              ? const Color(0xFFDEB887)
+                              : Colors.transparent,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          IconButton(
-            icon: Icon(Icons.list, color: Colors.black),
-            onPressed: () {
-              setState(() {
-                isMap = false;
-              });
-            },
+          Expanded(
+            child: isMap ? const MapWidget() : _buildList(),
           ),
-          SizedBox(width: 10)
         ],
       ),
-      body:isMap?MapWidget(): _buildList(),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.pushNamed(context, OrdersScreen.routeName);
-      },child: Icon(Icons.navigate_next),),
     );
   }
 
-  Widget _buildList(){
+  Widget _buildList() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(child: Text("Ro'yxat",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),)),
-          SizedBox(height: 16),
           Row(
             children: [
-              Icon(Icons.location_on, color: Colors.brown, size: 30),
-              SizedBox(width: 8),
-              Expanded(
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.brown.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.location_on,
+                  color: Colors.brown,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
                 child: Text(
-                  "Andijon Shahri, Qaysidir ko'cha, 10-a\nuy",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  "Andijon Shahri, Qaysidir ko'cha, 10-a uy",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 16),
-          SizedBox(
-            width: 230,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromRGBO(255, 223, 2, 1),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.yellow,
+              minimumSize: const Size(200, 45),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              child: Text("Shu yerdan olaman",
-                  style: TextStyle(color: Colors.black,fontSize: 18)),
+            ),
+            child: const Text(
+              "Shu yerdan olaman",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ],
       ),
     );
   }
-
 }
