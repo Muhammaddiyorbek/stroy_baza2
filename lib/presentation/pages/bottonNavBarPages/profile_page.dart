@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stroy_baza/presentation/pages/shop_list_screen.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -74,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
             _buildCard([
               _buildMenuItem(
                   "assets/profile_icons/support.svg", "Qo‘llab-quvvatlash",
-                  hideArrow: true),
+                  hideArrow: true, onTap: _showSupportModal),
               _buildMenuItem("assets/profile_icons/exit.svg", "Chiqish",
                   isRed: true, hideArrow: true),
             ]),
@@ -115,10 +117,106 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  void _showSupportModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Qo'llab-quvvatlash xizmati",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                IconButton(
+                  padding: EdgeInsets.zero,
+                  icon: const Icon(Icons.close),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text("+998 90 762 92 82"),
+              subtitle: const Text("Savolingiz bormi? Qo'ng'iroq qiling"),
+              trailing: const Icon(Icons.phone, color: Colors.black),
+              onTap: () => launchUrl(Uri.parse('tel:+998907629282')),
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text("+998 90 123 45 67"),
+              subtitle: const Text("Ishonch telefoni"),
+              trailing: const Icon(Icons.phone, color: Colors.black),
+              onTap: () => launchUrl(Uri.parse('tel:+998901234567')),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                _buildSocialButton('Instagram', FontAwesomeIcons.instagram),
+                _buildSocialButton('Youtube', FontAwesomeIcons.youtube),
+                _buildSocialButton('Telegram', FontAwesomeIcons.telegram),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialButton(String label, IconData icon) {
+    return InkWell(
+      onTap: () {
+        switch (label) {
+          case 'Instagram':
+            launchUrl(Uri.parse('https://instagram.com/stroybaza'));
+            break;
+          case 'Youtube':
+            launchUrl(Uri.parse('https://youtube.com/@stroybaza'));
+            break;
+          case 'Telegram':
+            launchUrl(Uri.parse('https://t.me/stroybaza'));
+            break;
+        }
+      },
+      child: Column(
+        children: [
+          Icon(icon, size: 30),
+          const SizedBox(height: 4),
+          Text(label),
+        ],
+      ),
+    );
+  }
+
   /// Item builder function
   /// Item builder function
   Widget _buildMenuItem(String svgIcon, String title,
-      {bool isRed = false, bool hideArrow = false}) {
+      {bool isRed = false, bool hideArrow = false, Function? onTap}) {
     return ListTile(
       leading: SvgPicture.asset(svgIcon, width: 24, height: 24),
       title: Text(
@@ -137,8 +235,7 @@ class _ProfilePageState extends State<ProfilePage> {
               height: 24,
             ),
       contentPadding: EdgeInsets.zero,
-      // o'chirmaslik kerak shuni
-      onTap: () {},
+      onTap: onTap != null ? () => onTap() : null,
     );
   }
 
