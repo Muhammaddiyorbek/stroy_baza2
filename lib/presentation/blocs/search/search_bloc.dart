@@ -4,7 +4,7 @@ import 'package:stroy_baza/presentation/blocs/search/search_state.dart';
 
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
   final List<String> _categories = [
-    "Penopleks",
+    "Penoplesk",
     "Teplesk",
     "Kley",
     "Oboy va kraskalar",
@@ -34,7 +34,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       if (state is CategoryLoaded) {
         final currentState = state as CategoryLoaded;
         final filtered =
-            currentState.categories.where((category) => category.toLowerCase().contains(event.query.toLowerCase())).toList();
+        currentState.categories.where((category) => category.toLowerCase().contains(event.query.toLowerCase())).toList();
         emit(currentState.copyWith(filteredCategories: filtered));
       }
     });

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stroy_baza/core/extensions/context_extension.dart';
 import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/presentation/blocs/language_bloc/language_bloc.dart';
 
@@ -25,7 +24,7 @@ class _InitState extends State<Init> {
       body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         ...List.generate(
           languages.length,
-          (index) {
+              (index) {
             final item = languages[index];
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),

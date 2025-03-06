@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/presentation/pages/Region1.dart';
+import 'package:stroy_baza/presentation/pages/about_product.dart';
 import 'package:stroy_baza/presentation/pages/bottonNavBarPages/profile_page.dart';
 import 'package:stroy_baza/presentation/pages/bottonNavBarPages/search_page.dart';
 import 'package:stroy_baza/presentation/pages/home.dart';
 import 'package:stroy_baza/presentation/pages/bottonNavBarPages/home_page.dart';
+import 'package:stroy_baza/presentation/pages/home_product.dart';
 import 'package:stroy_baza/presentation/pages/init.dart';
 import 'package:stroy_baza/presentation/pages/init2.dart';
 import 'package:stroy_baza/presentation/pages/region2.dart';
@@ -22,6 +24,8 @@ class AppRouteName {
   static const String region2 = "/region2";
   static const String subHome = "subHome";
   static const String signUp = "signUp";
+  static const String homeProduct = "/homeProduct";
+  static const String aboutProduct = "/aboutProduct";
 
   /// Bottom nav bar pages
   static const String main = "/main-screen";
@@ -74,11 +78,32 @@ sealed class AppRouter {
         ),
       ),
 
-      // Kirish2
+      // SignUp
       GoRoute(
         path: AppRouteName.signUp,
         pageBuilder: (context, state) => const CustomTransitionPage(
-          child: Init2(),
+          child: ProfilePage(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // Home Product
+      GoRoute(
+        path: "/homeProduct/:category",
+        pageBuilder: (context, state) {
+          final category = state.pathParameters['category'] ?? "Noma’lum";
+          return CustomTransitionPage(
+            child: HomeProduct(category: category),
+            transitionsBuilder: _fadeTransition,
+          );
+        },
+      ),
+
+      // About Product
+      GoRoute(
+        path: AppRouteName.aboutProduct,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: AboutProduct(),
           transitionsBuilder: _fadeTransition,
         ),
       ),
@@ -162,11 +187,11 @@ sealed class AppRouter {
   );
 
   static Widget _fadeTransition(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child,
-  ) {
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      Widget child,
+      ) {
     return FadeTransition(
       opacity: animation,
       child: child,

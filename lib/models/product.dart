@@ -1,25 +1,39 @@
 class Product {
-  String id = "";
-  String img_product = "";
-  String category = "";
-  String price = "";
-  bool liked = false;
-  bool basked = false;
+  String id;
+  String imgProduct;
+  String category;
+  String price;
+  bool liked;
+  bool basket;
 
-  Product(this.category, this.price, this.img_product);
+  Product({
+    required this.id,
+    required this.imgProduct,
+    required this.category,
+    required this.price,
+    this.liked = false,
+    this.basket = false,
+  });
 
-  Product.fromJson(Map<String, dynamic> json)
-      : img_product = json['img_post'],
-        id = json['id'],
-        category = json['caption'],
-        price = json['price'],
-        liked = json['liked'];
+  factory Product.fromJson(Map<String, dynamic> json) {
+    return Product(
+      id: json['id'] ?? '',
+      imgProduct: json['img_product'] ?? '',
+      category: json['category'] ?? '',
+      price: json['price'] ?? '',
+      liked: json['liked'] ?? false,
+      basket: json['basket'] ?? false,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        'img_post': img_product,
-        'caption': category,
-        'price': price,
-        'liked': liked,
-        'basked': basked,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'img_product': imgProduct,
+      'category': category,
+      'price': price,
+      'liked': liked,
+      'basket': basket,
+    };
+  }
 }

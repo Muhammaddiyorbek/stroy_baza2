@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/models/product.dart';
 
-class ItemOfProduct extends StatefulWidget {
+class ProductCard extends StatelessWidget {
   final Product product;
-  final Function() onFavoriteToggle;
-  final Function() onAddToCart;
+  final VoidCallback onFavoriteToggle;
+  final VoidCallback onAddToCart;
 
-  const ItemOfProduct({
+  const ProductCard({
     Key? key,
     required this.product,
     required this.onFavoriteToggle,
@@ -14,76 +16,99 @@ class ItemOfProduct extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ItemOfProductState createState() => _ItemOfProductState();
-}
-
-class _ItemOfProductState extends State<ItemOfProduct> {
-  @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(bottom: 5),
-          height: 170,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Color.fromRGBO(242, 242, 241, 1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Image.asset(widget.product.img_product),
+    return GestureDetector(
+      onTap: () {
+        context.push(AppRouteName.aboutProduct);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
         ),
-        Container(
-          height: 50,
-          width: double.infinity,
-          color: Colors.red,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.product.category,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 12),
+        child: Column(
+          children: [
+            Container(
+              height: 170,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(242, 242, 241, 1),
+                borderRadius: BorderRadius.circular(10),
               ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Stack(
                 children: [
-                  /// Narxi
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8),
-                    child: Text(
-                      "Narxi: ${widget.product.price} UZS",
-                      style: TextStyle(fontWeight: FontWeight.w500, fontSize: 12, color: Colors.black54),
+                  Center(
+                    child: Container(
+                      height: 114,
+                      width: 132,
+                      child: Image.asset(
+                        "assets/images/penopleks.png",
+                      ),
                     ),
                   ),
-                  // Row(
-                  //   children: [
-                  //     IconButton(
-                  //       icon: Icon(
-                  //         Icons.shopping_cart,
-                  //         color: Colors.amber,
-                  //         size: 16,
-                  //       ),
-                  //       onPressed: widget.onAddToCart,
-                  //     ),
-                  //     IconButton(
-                  //       icon: Icon(
-                  //         widget.product.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  //         color: widget.product.isFavorite ? Colors.red : Colors.grey,
-                  //         size: 16,
-                  //       ),
-                  //       onPressed: widget.onFavoriteToggle,
-                  //     ),
-                  //   ],
-                  // )
                 ],
-              )
-            ],
-          ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    textAlign: TextAlign.center,
+                    "PENOPLESK",
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                  ),
+                  SizedBox(height: 8),
+                  Container(
+                    height: 22,
+                    width: double.infinity,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              textAlign: TextAlign.center,
+                              "Narxi: 9.999 UZS",
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                            ),
+                            SizedBox(
+                              width: 12,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                onAddToCart();
+                              },
+                              child: Icon(
+                                product.basket ? Icons.shopping_cart : Icons.add_shopping_cart,
+                                color: Colors.amber[700],
+                                size: 18,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                onFavoriteToggle();
+                              },
+                              child: Icon(
+                                product.liked ? Icons.favorite : Icons.favorite_border,
+                                color: product.liked ? Colors.red : Colors.grey,
+                                size: 18,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

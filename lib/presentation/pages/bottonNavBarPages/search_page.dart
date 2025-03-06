@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/presentation/blocs/search/search_bloc.dart';
 import 'package:stroy_baza/presentation/blocs/search/search_event.dart';
 import 'package:stroy_baza/presentation/blocs/search/search_state.dart';
@@ -64,9 +65,7 @@ class _SearchPageState extends State<SearchPage> {
                         color: Color.fromRGBO(0, 0, 0, 0.55),
                         size: 24,
                       ),
-                      onTap: () {
-                        ///Categoriya yo'li
-                      },
+                      onTap: () => context.push("/homeProduct/Penoplesk"),
                     ),
                   );
                 },

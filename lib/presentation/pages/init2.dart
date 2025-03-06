@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/core/router/router.dart';
 
@@ -26,7 +25,7 @@ class _Init2State extends State<Init2> {
           children: [
             ...List.generate(
               contents.length,
-              (index) {
+                  (index) {
                 final item = contents[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 31.0, vertical: 10),
