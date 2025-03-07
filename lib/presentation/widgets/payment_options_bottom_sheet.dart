@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/app_constats/assets_model.dart';
+import 'package:stroy_baza/core/router/router.dart';
 
 class PaymentOptionsBottomSheet extends StatefulWidget {
   const PaymentOptionsBottomSheet({super.key});
 
   @override
-  State<PaymentOptionsBottomSheet> createState() =>
-      _PaymentOptionsBottomSheetState();
+  State<PaymentOptionsBottomSheet> createState() => _PaymentOptionsBottomSheetState();
 }
 
 class _PaymentOptionsBottomSheetState extends State<PaymentOptionsBottomSheet> {
@@ -30,8 +31,7 @@ class _PaymentOptionsBottomSheetState extends State<PaymentOptionsBottomSheet> {
             ),
           ),
           Container(
-            padding:
-                const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 0),
+            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -118,7 +118,7 @@ class _PaymentOptionsBottomSheetState extends State<PaymentOptionsBottomSheet> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      context.push(AppRouteName.yetkazib_berish_manzili);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFDEB887),

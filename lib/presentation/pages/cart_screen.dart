@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/app_constats/assets_model.dart';
+import 'package:stroy_baza/core/router/router.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -20,7 +22,7 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: const Color(0xFFDEB887),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.push(AppRouteName.aboutProduct),
         ),
         title: const Text(
           'Savatcha',
@@ -183,19 +185,14 @@ class _CartScreenState extends State<CartScreen> {
                       decoration: BoxDecoration(
                         color: !isInstallment ? Colors.white : Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
-                        border: !isInstallment
-                            ? Border.all(color: Colors.grey.shade300)
-                            : null,
+                        border: !isInstallment ? Border.all(color: Colors.grey.shade300) : null,
                       ),
                       alignment: Alignment.center,
                       child: Text(
                         'Hoziroq to\'lash',
                         style: TextStyle(
-                          color:
-                              !isInstallment ? Colors.black : Colors.grey[600],
-                          fontWeight: !isInstallment
-                              ? FontWeight.w500
-                              : FontWeight.normal,
+                          color: !isInstallment ? Colors.black : Colors.grey[600],
+                          fontWeight: !isInstallment ? FontWeight.w500 : FontWeight.normal,
                         ),
                       ),
                     ),
@@ -208,19 +205,14 @@ class _CartScreenState extends State<CartScreen> {
                       decoration: BoxDecoration(
                         color: isInstallment ? Colors.white : Colors.grey[200],
                         borderRadius: BorderRadius.circular(8),
-                        border: isInstallment
-                            ? Border.all(color: Colors.grey.shade300)
-                            : null,
+                        border: isInstallment ? Border.all(color: Colors.grey.shade300) : null,
                       ),
                       alignment: Alignment.center,
                       child: Text(
                         'Muddatli to\'lov',
                         style: TextStyle(
-                          color:
-                              isInstallment ? Colors.black : Colors.grey[600],
-                          fontWeight: isInstallment
-                              ? FontWeight.w500
-                              : FontWeight.normal,
+                          color: isInstallment ? Colors.black : Colors.grey[600],
+                          fontWeight: isInstallment ? FontWeight.w500 : FontWeight.normal,
                         ),
                       ),
                     ),
@@ -242,6 +234,7 @@ class _CartScreenState extends State<CartScreen> {
             'Siz buyurtmani 3 oydan 24 oygacha muddatli to\'lov evaziga xarid qilishingiz mumkin.',
             style: TextStyle(fontSize: 13),
           ),
+
           const SizedBox(height: 100),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -263,7 +256,9 @@ class _CartScreenState extends State<CartScreen> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.push(AppRouteName.home_buyurtma);
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFDEB887),
                 padding: const EdgeInsets.symmetric(vertical: 16),

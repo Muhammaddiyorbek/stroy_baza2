@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:stroy_baza/core/router/router.dart';
+import 'package:stroy_baza/presentation/pages/bottonNavBarPages/basked_page.dart';
+import 'package:stroy_baza/presentation/pages/cart_screen.dart';
 
 /// Product images and indicator
 class ProductCarusel extends StatelessWidget {
@@ -281,7 +285,14 @@ class DeliveryInfoCard extends StatelessWidget {
               backgroundColor: Color.fromRGBO(220, 195, 139, 1),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CartScreen(),
+                ),
+              );
+            },
             child: const Text("Savatchaga qo‘shish",
                 style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold)),
           ),

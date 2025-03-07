@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/presentation/widgets/items/items_of_aboutProductPage.dart';
@@ -39,6 +40,15 @@ class _AboutProductState extends State<AboutProduct> {
           "Penoplex",
           style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset("assets/icons/white_unliked.svg"),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

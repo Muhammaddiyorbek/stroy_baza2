@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/app_constats/assets_model.dart';
+import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/presentation/widgets/payment_options_bottom_sheet.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -11,7 +13,7 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   int selectedPaymentMethod = 3;
-   
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +43,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
               _buildSectionTitle('Sizning buyurtmangiz'),
               _buildOrderSummary(),
               const SizedBox(height: 20),
-              _buildCheckoutButton(),
+              GestureDetector(
+                  onTap: (){
+                    context.push(AppRouteName.yetkazib_berish_manzili);
+                  },
+                  child: _buildCheckoutButton()),
               _buildTermsAndConditions(),
             ],
           ),
@@ -88,6 +94,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
+
 
   Widget _buildProductCard() {
     return Container(
@@ -195,7 +202,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
       child: ListTile(
         leading:
-            const Icon(Icons.monetization_on_outlined, color: Colors.amber),
+        const Icon(Icons.monetization_on_outlined, color: Colors.amber),
         title: const Text('Keshbekni ishlatish'),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -216,6 +223,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
       ),
     );
   }
+
 
   Widget _buildPaymentMethods() {
     return Container(
@@ -342,22 +350,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
     );
   }
 
+
   Widget _buildTermsAndConditions() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Center(
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            style: const TextStyle(color: Colors.black87, fontSize: 12),
-            children: [
-              const TextSpan(text: 'Buyurtmani tasdiqlash orqali men '),
-              TextSpan(
-                text: 'foydalanuvchi shartnomasini',
-                style: TextStyle(color: Colors.purple.shade700),
-              ),
-              const TextSpan(text: ' shartlarini qabul qilaman.'),
-            ],
+        child: GestureDetector(
+          onTap: (){
+            context.push(AppRouteName.shartnoma);
+          },
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              style: const TextStyle(color: Colors.black87, fontSize: 12),
+              children: [
+                const TextSpan(text: 'Buyurtmani tasdiqlash orqali men '),
+                TextSpan(
+                  text: 'foydalanuvchi shartnomasini',
+                  style: TextStyle(color: Colors.purple.shade700),
+                ),
+                const TextSpan(text: ' shartlarini qabul qilaman.'),
+              ],
+            ),
           ),
         ),
       ),

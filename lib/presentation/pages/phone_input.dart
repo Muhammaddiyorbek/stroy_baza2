@@ -3,14 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:stroy_baza/presentation/pages/verification_screen.dart';
 
 class PhoneInputScreen extends StatefulWidget {
+  const PhoneInputScreen({super.key});
+
+  static const routeName = '/phone-input';
+
   @override
   State<PhoneInputScreen> createState() => _PhoneInputScreenState();
-  static const routeName='/phone-input';
 }
 
 class _PhoneInputScreenState extends State<PhoneInputScreen> {
   final TextEditingController _controller = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +31,13 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color:  Colors.grey),
+                    border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 12),
                         child: Text(
                           '+998',
                           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -50,12 +52,12 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                         child: TextField(
                           controller: _controller,
                           keyboardType: TextInputType.number,
-                          style: TextStyle(fontWeight: FontWeight.w500,fontSize: 18),
+                          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18),
                           inputFormatters: [
                             FilteringTextInputFormatter.digitsOnly,
                             PhoneNumberFormatter(),
                           ],
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             contentPadding: EdgeInsets.symmetric(horizontal: 12),
                             border: InputBorder.none,
                             hintText: '__-___-__-__',
@@ -71,18 +73,25 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                   height: 58,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromRGBO(255, 223, 2, 1),
+                      backgroundColor: const Color.fromRGBO(255, 223, 2, 1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(5),
-                        side: BorderSide(color: Colors.grey,width: 0.5)
+                        side: const BorderSide(color: Colors.grey, width: 0.5),
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, VerificationScreen.routeName,arguments: _controller.text);
+                      final phoneNumber = _controller.text.trim();
+                      if (phoneNumber.isNotEmpty) {
+                        Navigator.pushNamed(
+                          context,
+                          VerificationScreen.routeName,
+                          arguments: phoneNumber,
+                        );
+                      }
                     },
-                    child: Text(
+                    child: const Text(
                       'Kirish',
-                      style: TextStyle(fontSize: 20, color: Colors.black,fontWeight: FontWeight.w500),
+                      style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -91,14 +100,14 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
           ),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 20,left: 10,right: 10),
+            padding: const EdgeInsets.only(bottom: 20, left: 10, right: 10),
             child: SizedBox(
               width: double.infinity,
               child: TextButton(
                 onPressed: () {},
-                child: Text(
+                child: const Text(
                   'Login orqali kirish',
-                  style: TextStyle(fontSize: 16, color:Color.fromRGBO(71, 38, 188, 0.75)),
+                  style: TextStyle(fontSize: 16, color: Color.fromRGBO(71, 38, 188, 0.75)),
                 ),
               ),
             ),
@@ -111,8 +120,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
 
 class PhoneNumberFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
     String formatted = '';
 

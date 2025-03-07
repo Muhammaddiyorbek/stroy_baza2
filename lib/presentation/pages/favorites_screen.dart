@@ -1,159 +1,74 @@
 import 'package:flutter/material.dart';
-import 'package:stroy_baza/app_constats/assets_model.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/core/router/router.dart';
+import 'package:stroy_baza/models/product.dart';
+import 'package:stroy_baza/presentation/widgets/items/item_of_product.dart';
 
-class FavoritesScreen extends StatelessWidget {
-  const FavoritesScreen({super.key});
+class FavoritesScreen extends StatefulWidget {
+  final String category;
+
+  const FavoritesScreen({super.key, required this.category});
+
+  @override
+  State<FavoritesScreen> createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  List<Product> products = [
+    Product(id: '1', imgProduct: 'assets/images/penopleks.png', category: 'Mebel', price: '120000'),
+    Product(id: '2', imgProduct: 'assets/images/penopleks.png', category: 'Stroy Material', price: '250000'),
+    Product(id: '3', imgProduct: 'assets/images/penopleks.png', category: 'Gold Klinker', price: '500000'),
+    Product(id: '4', imgProduct: 'assets/images/penopleks.png', category: 'Gold Klinker', price: '500000'),
+  ];
+
+  void _toggleFavorite(Product product) {
+    setState(() {
+      product.liked = !product.liked;
+    });
+  }
+
+  void _addToCart(Product product) {
+    setState(() {
+      product.basket = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFDEB887),
+        backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.chevron_left, color: Colors.black),
+          onPressed: () => context.go(AppRouteName.search),
         ),
+        titleSpacing: -15,
         title: const Text(
-          'Sevimlilar',
-          style: TextStyle(color: Colors.black),
+          "Penoplex",
+          style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
         ),
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 0.65,
+      body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 20),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22.0),
+          child: GridView.builder(
+            itemCount: products.length,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 18,
+              crossAxisSpacing: 18,
+              mainAxisExtent: 250, // Kartaning balandligini moslashtirdim
+            ),
+            itemBuilder: (context, index) => ProductCard(
+              product: products[index],
+              onFavoriteToggle: () => _toggleFavorite(products[index]),
+              onAddToCart: () => _addToCart(products[index]),
+            ),
+          ),
         ),
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          return _buildProductCard();
-        },
-      ),
-    );
-  }
-
-  Widget _buildProductCard() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: Image.asset(
-                      AssetsModel.penoplex,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  // Positioned(
-                  //   top: 0,
-                  //   right: 0,
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(
-                  //       horizontal: 6,
-                  //       vertical: 2,
-                  //     ),
-                  //     decoration: BoxDecoration(
-                  //       color: const Color(0xFFFF5722),
-                  //       borderRadius: BorderRadius.circular(8),
-                  //     ),
-                  //     child: const Text(
-                  //       '50',
-                  //       style: TextStyle(
-                  //         color: Colors.white,
-                  //         fontSize: 10,
-                  //         fontWeight: FontWeight.bold,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'PENOPLESK',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFEEEEEE),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: const Text(
-                        '1.999 so\'mdan / 12oy',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.black54,
-                        ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.shopping_cart,
-                          color: Colors.amber[700],
-                          size: 18,
-                        ),
-                        const SizedBox(width: 4),
-                        const Icon(
-                          Icons.favorite,
-                          color: Color(0xFFE53935),
-                          size: 18,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Narxi: 9.999 UZS',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
