@@ -22,7 +22,7 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: const Color(0xFFDEB887),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => context.push(AppRouteName.aboutProduct),
+          onPressed: () => (),  //context.push(AppRouteName.aboutProduct),
         ),
         title: const Text(
           'Savatcha',

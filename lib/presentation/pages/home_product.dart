@@ -52,23 +52,28 @@ class _HomeProductState extends State<HomeProduct> {
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 20),
-        child: Padding(
+        child:  Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22.0),
-          child: GridView.builder(
-            itemCount: products.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 18,
-              crossAxisSpacing: 18,
-              mainAxisExtent: 250, // Kartaning balandligini moslashtirdim
-            ),
-            itemBuilder: (context, index) => ProductCard(
-              product: products[index],
-              onFavoriteToggle: () => _toggleFavorite(products[index]),
-              onAddToCart: () => _addToCart(products[index]),
-            ),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              int crossAxisCount = constraints.maxWidth > 600 ? 4 : 2;
+              return GridView.builder(
+                itemCount: products.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  mainAxisSpacing: 18,
+                  crossAxisSpacing: 18,
+                  mainAxisExtent: 250,
+                ),
+                itemBuilder: (context, index) => ProductCard(
+                  product: products[index],
+                  onFavoriteToggle: () => setState(() => products[index].liked = !products[index].liked),
+                  onAddToCart: () => setState(() => products[index].basket = true),
+                ),
+              );
+            },
           ),
         ),
       ),

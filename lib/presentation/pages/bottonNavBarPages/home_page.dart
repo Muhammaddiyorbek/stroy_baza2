@@ -20,6 +20,10 @@ class _HomePageState extends State<HomePage> {
     Product(id: '1', imgProduct: 'assets/images/penopleks.png', category: 'Mebel', price: '120000'),
     Product(id: '2', imgProduct: 'assets/images/penopleks.png', category: 'Stroy Material', price: '250000'),
     Product(id: '3', imgProduct: 'assets/images/penopleks.png', category: 'Gold Klinker', price: '500000'),
+    Product(id: '4', imgProduct: 'assets/images/penopleks.png', category: 'Gold Klinker', price: '500000'),
+    Product(id: '5', imgProduct: 'assets/images/penopleks.png', category: 'Gold Klinker', price: '500000'),
+    Product(id: '6', imgProduct: 'assets/images/penopleks.png', category: 'Gold Klinker', price: '500000'),
+    Product(id: '7', imgProduct: 'assets/images/penopleks.png', category: 'Gold Klinker', price: '500000'),
   ];
 
   void _toggleFavorite(Product product) {
@@ -40,10 +44,12 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     double statusBarHeight = MediaQuery.of(context).padding.top;
-    double headerHeight = statusBarHeight + 150; // Status bar + 150px sariq header
+    double screenWidth = MediaQuery.of(context).size.width;
+    double headerHeight = statusBarHeight + 150;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -59,14 +65,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 15),
-                Image.asset(
-                  'assets/images/h.png',
-                  height: 71,
-                  width: 77,
-                ),
-                GestureDetector(onTap: () {}, child: const SizedBox(height: 10)),
-
-                /// Search
+                Image.asset('assets/images/h.png', height: 71, width: 77),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 22.0),
                   child: Container(
@@ -74,12 +73,7 @@ class _HomePageState extends State<HomePage> {
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Qidirish',
-                        hintStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.55), fontFamily: 'Inter'),
-                        prefixIcon: const Icon(
-                          Icons.search,
-                          color: Color.fromRGBO(0, 0, 0, 0.55),
-                          size: 26,
-                        ),
+                        prefixIcon: const Icon(Icons.search, size: 26),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -99,6 +93,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   /// Category
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 20),
@@ -110,23 +105,29 @@ class _HomePageState extends State<HomePage> {
                         border: Border.all(color: const Color.fromRGBO(136, 121, 121, 0.55)),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Row(
-                        children: [
-                          _buildCategoryItem("Stroy Baza №1"),
-                          _buildCategoryItem("Mebel"),
-                          _buildCategoryItem("Gold Klinker"),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 18), // Ikkala chekkadan 18px masofa
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween, // Matnlarni yaqinlashtiramiz
+                          crossAxisAlignment: CrossAxisAlignment.center, // Vertikal markazlash
+                          children: [
+                            _buildCategoryItem("Stroy Baza №1"),
+                            _buildCategoryItem("Mebel"),
+                            _buildCategoryItem("Gold Klinker"),
+                          ],
+                        ),
                       ),
                     ),
                   ),
 
-                  /// Carusel
+
+                  /// Carousel
                   FlutterCarousel(
                     options: FlutterCarouselOptions(
-                      height: 184.0,
+                      height: screenWidth > 600 ? 250.0 : 184.0,
+                      viewportFraction: screenWidth > 600 ? 0.7 : 0.9,
                       showIndicator: false,
                       initialPage: 1,
-                      viewportFraction: 0.9,
                     ),
                     items: [
                       BuildCarouselItem(title: 'Coming soon!'),
@@ -144,24 +145,29 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
 
-                  /// Grid view
+                  /// GridView
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                    child: GridView.builder(
-                      itemCount: products.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 18,
-                        crossAxisSpacing: 18,
-                        mainAxisExtent: 250, // Kartaning balandligini moslashtirdim
-                      ),
-                      itemBuilder: (context, index) => ProductCard(
-                        product: products[index],
-                        onFavoriteToggle: () => _toggleFavorite(products[index]),
-                        onAddToCart: () => _addToCart(products[index]),
-                      ),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        int crossAxisCount = constraints.maxWidth > 600 ? 4 : 2;
+                        return GridView.builder(
+                          itemCount: products.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            mainAxisSpacing: 18,
+                            crossAxisSpacing: 18,
+                            mainAxisExtent: 250,
+                          ),
+                          itemBuilder: (context, index) => ProductCard(
+                            product: products[index],
+                            onFavoriteToggle: () => setState(() => products[index].liked = !products[index].liked),
+                            onAddToCart: () => setState(() => products[index].basket = true),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -176,22 +182,21 @@ class _HomePageState extends State<HomePage> {
   /// Category
   Widget _buildCategoryItem(String title) {
     bool isSelected = _selectedCategory == title;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => setState(() => _selectedCategory = title),
-        child: Container(
-          padding: EdgeInsets.only(left: 2),
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: isSelected ? Color.fromRGBO(218, 151, 0, 1) : Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
-            ),
+    return GestureDetector(
+      onTap: () => setState(() => _selectedCategory = title),
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: isSelected ? Color.fromRGBO(218, 151, 0, 1) : Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ),
     );
   }
+
 }

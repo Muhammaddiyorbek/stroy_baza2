@@ -56,52 +56,47 @@ class ProductCard extends StatelessWidget {
                   Text(
                     textAlign: TextAlign.center,
                     "PENOPLESK",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.width < 400 ? 11 : 12, fontWeight: FontWeight.w600),
                   ),
                   SizedBox(height: 8),
-                  Container(
-                    height: 22,
-                    width: double.infinity,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              textAlign: TextAlign.center,
-                              "Narxi: 9.999 UZS",
-                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-                            ),
-                            SizedBox(
-                              width: 12,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                onAddToCart();
-                              },
-                              child: Icon(
-                                product.basket ? Icons.shopping_cart : Icons.add_shopping_cart,
-                                color: Colors.amber[700],
-                                size: 18,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 6,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                onFavoriteToggle();
-                              },
-                              child: Icon(
-                                product.liked ? Icons.favorite : Icons.favorite_border,
-                                color: product.liked ? Colors.red : Colors.grey,
-                                size: 18,
-                              ),
-                            ),
-                          ],
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Narxi: 1.999.999 UZS",
+                        style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width < 400 ? 10 : 12,
+                          fontWeight: FontWeight.w500,
                         ),
-                      ],
-                    ),
+                      ),
+
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              onAddToCart();
+                            },
+                            child: Icon(
+                              product.basket ? Icons.shopping_cart : Icons.add_shopping_cart,
+                              color: Colors.amber[700],
+                              size: MediaQuery.of(context).size.width < 400 ? 16 : 18,
+                            ),
+                          ),
+                          SizedBox(width: 6),
+                          GestureDetector(
+                            onTap: () {
+                              onFavoriteToggle();
+                            },
+                            child: Icon(
+                              product.liked ? Icons.favorite : Icons.favorite_border,
+                              color: product.liked ? Colors.red : Colors.grey,
+                              size: MediaQuery.of(context).size.width < 400 ? 17 : 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -112,3 +107,4 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
