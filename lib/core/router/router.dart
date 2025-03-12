@@ -1,0 +1,193 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/presentation/pages/Region1.dart';
+import 'package:stroy_baza/presentation/pages/about_product.dart';
+import 'package:stroy_baza/presentation/pages/bottonNavBarPages/profile_page.dart';
+import 'package:stroy_baza/presentation/pages/bottonNavBarPages/search_page.dart';
+import 'package:stroy_baza/presentation/pages/cart_screen.dart';
+import 'package:stroy_baza/presentation/pages/home.dart';
+import 'package:stroy_baza/presentation/pages/bottonNavBarPages/home_page.dart';
+import 'package:stroy_baza/presentation/pages/home_product.dart';
+import 'package:stroy_baza/presentation/pages/init.dart';
+import 'package:stroy_baza/presentation/pages/init2.dart';
+import 'package:stroy_baza/presentation/pages/region2.dart';
+
+// Global navigator keys
+final GlobalKey<NavigatorState> _appNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: "app-key");
+final GlobalKey<NavigatorState> _shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: "shell-key");
+
+class AppRouteName {
+  const AppRouteName._();
+
+  static const String init = "/init";
+  static const String init2 = "/init2";
+  static const String region1 = "/region1";
+  static const String region2 = "/region2";
+  static const String subHome = "subHome";
+  static const String signUp = "signUp";
+  static const String homeProduct = "/homeProduct";
+
+  /// Bottom nav bar pages
+  static const String main = "/main-screen";
+  static const String search = "/search";
+  static const String box = "/box";
+  static const String basket = "/basket";
+  static const String profile = "/profile";
+}
+
+sealed class AppRouter {
+  AppRouter._();
+
+  static GoRouter router = GoRouter(
+    navigatorKey: _appNavigatorKey,
+    initialLocation: AppRouteName.init,
+    routes: [
+      // Kirish
+      GoRoute(
+        path: AppRouteName.init,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: Init(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // Region1
+      GoRoute(
+        path: AppRouteName.region1,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: Region1(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // Region2
+      GoRoute(
+        path: AppRouteName.region2,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: Region2(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // Kirish2
+      GoRoute(
+        path: AppRouteName.init2,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: Init2(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // SignUp
+      GoRoute(
+        path: AppRouteName.signUp,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: ProfilePage(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // Home Product
+      GoRoute(
+        path: "/product/:id",
+        pageBuilder: (context, state) {
+          final id = state.pathParameters['id'] ?? '';
+          return CustomTransitionPage(
+            child: HomeProduct(id: id),
+            transitionsBuilder: _fadeTransition,
+          );
+        },
+      ),
+
+      // Stateful Shell Route for bottom navigation pages
+      StatefulShellRoute.indexedStack(
+        parentNavigatorKey: _appNavigatorKey,
+        builder: (context, state, navigationShell) {
+          return MainWrapper(navigationShell: navigationShell);
+        },
+        branches: [
+          // Home branch
+          StatefulShellBranch(
+            navigatorKey: _shellNavigatorKey,
+            routes: [
+              GoRoute(
+                path: AppRouteName.main,
+                pageBuilder: (context, state) => const CustomTransitionPage(
+                  child: HomePage(),
+                  transitionsBuilder: _fadeTransition,
+                  transitionDuration: Duration(seconds: 2),
+                ),
+              ),
+            ],
+          ),
+          // Search branch
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRouteName.search,
+                pageBuilder: (context, state) => const CustomTransitionPage(
+                  child: SearchPage(),
+                  transitionsBuilder: _fadeTransition,
+                  transitionDuration: Duration(seconds: 2),
+                ),
+              ),
+            ],
+          ),
+          // Box branch
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRouteName.box,
+                pageBuilder: (context, state) => const CustomTransitionPage(
+                  child: Scaffold(body: Center(child: Text("Box"))),
+                  transitionsBuilder: _fadeTransition,
+                  transitionDuration: Duration(seconds: 2),
+                ),
+              ),
+            ],
+          ),
+          // Basket branch
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRouteName.basket,
+                pageBuilder: (context, state) => const CustomTransitionPage(
+                  child: CartScreen(),
+                  transitionsBuilder: _fadeTransition,
+                  transitionDuration: Duration(seconds: 2),
+                ),
+              ),
+            ],
+          ),
+          // Profile branch
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRouteName.profile,
+                pageBuilder: (context, state) => const CustomTransitionPage(
+                  child: ProfilePage(),
+                  transitionsBuilder: _fadeTransition,
+                  transitionDuration: Duration(seconds: 2),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ],
+  );
+
+  static Widget _fadeTransition(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
+    return FadeTransition(
+      opacity: animation,
+      child: child,
+    );
+  }
+}
