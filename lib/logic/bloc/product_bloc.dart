@@ -4,25 +4,24 @@ import 'package:stroy_baza/logic/bloc/product_state.dart';
 import 'package:stroy_baza/logic/repository/product_repository.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-  final ProductRepository _productRepository;
+  final ProductRepository repository;
 
-  ProductBloc(this._productRepository) : super(ProductInitialState()) {
+  ProductBloc(this.repository) : super(ProductInitialState()) {
     on<LoadProducts>((event, emit) async {
       emit(ProductLoadingState());
       try {
-        final products = await _productRepository.getProducts();
+        final products = await repository.getProducts();  // _productRepository emas, repository ishlatiladi
         emit(ProductLoadedState(products));
       } catch (e) {
         emit(ProductErrorState(e.toString()));
       }
     });
 
-    on<GetProductByIdEvent>((event, emit) async {
-      emit(ProductLoadingState());
+    on<LoadProductById>((event, emit) async {
       try {
-        final products = await _productRepository.getProducts();
-        final product = products.firstWhere((p) => p.id.toString() == event.productId);
-        emit(ProductLoadedState([product]));
+        final products = (state as ProductLoadedState).products;
+        final product = products.firstWhere((p) => p.id == event.id);
+        emit(ProductSelectedState(product));
       } catch (e) {
         emit(ProductErrorState(e.toString()));
       }

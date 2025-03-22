@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:stroy_baza/core/router/router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stroy_baza/logic/bloc/product_bloc.dart';
+import 'package:stroy_baza/logic/bloc/product_event.dart';
+import 'package:stroy_baza/logic/bloc/product_state.dart';
+import 'package:stroy_baza/models/product.dart';
 import 'package:stroy_baza/presentation/widgets/items/items_of_aboutProductPage.dart';
 
 class AboutProduct extends StatefulWidget {
   final int productId;
-
   const AboutProduct({super.key, required this.productId});
 
   @override
@@ -13,18 +15,14 @@ class AboutProduct extends StatefulWidget {
 }
 
 class _AboutProductState extends State<AboutProduct> {
-  int selectedImage = 0;
-  int selectedSize = 0;
+  int selectedVariant = 0;
   int selectedMonth = 3;
 
-  final List<String> images = [
-    'assets/images/penopleks.png',
-    'assets/images/penopleks.png',
-    'assets/images/penopleks.png',
-    'assets/images/penopleks.png'
-  ];
-  final List<String> sizes = ['4×6', '4×6', '4×6', '4×6'];
-  final List<int> months = [3, 6, 12, 24];
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProductBloc>().add(LoadProductById(widget.productId));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,114 +32,148 @@ class _AboutProductState extends State<AboutProduct> {
         backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
         leading: IconButton(
           icon: const Icon(Icons.chevron_left, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
         ),
         titleSpacing: -15,
         title: const Text(
-          "Penoplex",
+          "Mahsulot haqida",
           style: TextStyle(
               color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 50,
+      body: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          if (state is ProductLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Color.fromRGBO(220, 195, 139, 1),
               ),
+            );
+          }
 
-              /// Products, indicator
-              ProductCarusel(),
+          if (state is ProductLoadedState && state.products.isNotEmpty) {
+            final product = state.products.firstWhere(
+              (p) => p.id == widget.productId,
+              orElse: () => state.products.first,
+            );
 
-              const SizedBox(height: 18),
+            if (product.variants.isEmpty) {
+              return const Center(
+                child: Text('Mahsulot variantlari mavjud emas'),
+              );
+            }
 
-              const Text("Mavjud",
-                  style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold)),
+            final variant = product.variants[selectedVariant];
+            final images = [
+              "https://back.stroybazan1.uz${variant.image}",
+              ...product.variants
+                  .map((v) => "https://back.stroybazan1.uz${v.image}")
+            ];
 
-              const Text(
-                "Penoplex Komfort",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-              ),
-
-              const Text(
-                "Rang : Ko'k",
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400),
-              ),
-
-              SizedBox(
-                height: 6,
-              ),
-
-              Row(
-                children: List.generate(
-                  images.length,
-                  (index) => Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: SelectableImage(
-                      imagePath: images[index],
-                      isSelected: index == selectedImage,
-                      onTap: () => setState(() => selectedImage = index),
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 20),
+                    ProductCarusel(images: images),
+                    const SizedBox(height: 18),
+                    Text(
+                      variant.isAvailable ? "Mavjud" : "Mavjud emas",
+                      style: TextStyle(
+                          color:
+                              variant.isAvailable ? Colors.green : Colors.red,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              const Text(
-                "O'lchami (Metr²): 4x6",
-                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-              ),
-
-              const SizedBox(height: 7),
-
-              Row(
-                children: List.generate(
-                  sizes.length,
-                  (index) => Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: SelectableSize(
-                      text: sizes[index],
-                      isSelected: index == selectedSize,
-                      onTap: () => setState(() => selectedSize = index),
+                    Text(
+                      product.nameUz,
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.w600),
                     ),
-                  ),
+                    Text(
+                      "Rang: ${variant.colorUz}",
+                      style: const TextStyle(
+                          fontSize: 13,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 6),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(
+                          product.variants.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: SelectableImage(
+                              imagePath:
+                                  "https://back.stroybazan1.uz${product.variants[index].image}",
+                              isSelected: index == selectedVariant,
+                              onTap: () =>
+                                  setState(() => selectedVariant = index),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      "O'lchami: ${variant.sizeUz}",
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 7),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: List.generate(
+                          product.variants.length,
+                          (index) => Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: SelectableSize(
+                              text: product.variants[index].sizeUz,
+                              isSelected: index == selectedVariant,
+                              onTap: () =>
+                                  setState(() => selectedVariant = index),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: Text(
+                        "${variant.price} so'm",
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                    InstallmentSelection(
+                      selectedMonth: selectedMonth,
+                      monthlyPayments: {
+                        3: variant.monthlyPayment3,
+                        6: variant.monthlyPayment6,
+                        12: variant.monthlyPayment12,
+                        24: variant.monthlyPayment24,
+                      },
+                      onSelect: (value) =>
+                          setState(() => selectedMonth = value),
+                    ),
+                    const SizedBox(height: 10),
+                    const DeliveryInfoCard(),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
+            );
+          }
 
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: const Text(
-                  "1.116.000 so'm",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // 3. Muddatli to‘lov
-              InstallmentSelection(
-                selectedMonth: selectedMonth,
-                onSelect: (value) => setState(() => selectedMonth = value),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-
-              DeliveryInfoCard(),
-            ],
-          ),
-        ),
+          return const Center(
+            child: Text('Mahsulot topilmadi'),
+          );
+        },
       ),
     );
   }

@@ -1,1 +1,219 @@
-Test commit
+
+======== Exception caught by image resource service ================================================
+The following assertion was thrown resolving an image codec:
+Unable to load asset: "/media/product_images/thumb-1920-234864.jpg".
+
+Exception: Asset not found
+When the exception was thrown, this was the stack: 
+#0      PlatformAssetBundle.loadBuffer (package:flutter/src/services/asset_bundle.dart:364:7)
+<asynchronous suspension>
+#1      AssetBundleImageProvider._loadAsync (package:flutter/src/painting/image_provider.dart:760:16)
+<asynchronous suspension>
+#2      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1013:3)
+<asynchronous suspension>
+Image provider: AssetImage(bundle: null, name: "/media/product_images/thumb-1920-234864.jpg")
+Image key: AssetBundleImageKey(bundle: PlatformAssetBundle#80da0(), name: "/media/product_images/thumb-1920-234864.jpg", scale: 1.0)
+====================================================================================================
+D/DecorView[](11121): getWindowModeFromSystem  windowmode is 1
+D/DecorView[](11121): updateDecorCaptionStatus windowMode is 1
+
+======== Exception caught by image resource service ================================================
+The following NetworkImageLoadException was thrown resolving an image codec:
+HTTP request failed, statusCode: 404, https://back.stroybazan1.uz/media/product_images/thumb-1920-234864.jpg
+
+When the exception was thrown, this was the stack: 
+#0      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:115:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1013:3)
+<asynchronous suspension>
+Image provider: NetworkImage("https://back.stroybazan1.uz/media/product_images/thumb-1920-234864.jpg", scale: 1.0)
+Image key: NetworkImage("https://back.stroybazan1.uz/media/product_images/thumb-1920-234864.jpg", scale: 1.0)
+====================================================================================================
+
+======== Exception caught by image resource service ================================================
+The following NetworkImageLoadException was thrown resolving an image codec:
+HTTP request failed, statusCode: 404, https://back.stroybazan1.uz/media/products/thumb-1920-234864.jpg
+
+When the exception was thrown, this was the stack: 
+#0      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:115:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1013:3)
+<asynchronous suspension>
+Image provider: NetworkImage("https://back.stroybazan1.uz/media/products/thumb-1920-234864.jpg", scale: 1.0)
+Image key: NetworkImage("https://back.stroybazan1.uz/media/products/thumb-1920-234864.jpg", scale: 1.0)
+====================================================================================================
+
+======== Exception caught by image resource service ================================================
+The following assertion was thrown resolving an image codec:
+Unable to load asset: "/media/product_images/thumb-1920-234864.jpg".
+
+Exception: Asset not found
+When the exception was thrown, this was the stack: 
+#0      PlatformAssetBundle.loadBuffer (package:flutter/src/services/asset_bundle.dart:364:7)
+<asynchronous suspension>
+#1      AssetBundleImageProvider._loadAsync (package:flutter/src/painting/image_provider.dart:760:16)
+<asynchronous suspension>
+#2      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1013:3)
+<asynchronous suspension>
+Image provider: AssetImage(bundle: null, name: "/media/product_images/thumb-1920-234864.jpg")
+Image key: AssetBundleImageKey(bundle: PlatformAssetBundle#80da0(), name: "/media/product_images/thumb-1920-234864.jpg", scale: 1.0)
+====================================================================================================
+
+======== Exception caught by image resource service ================================================
+The following NetworkImageLoadException was thrown resolving an image codec:
+HTTP request failed, statusCode: 404, https://back.stroybazan1.uz/media/products/thumb-1920-234864.jpg
+
+When the exception was thrown, this was the stack: 
+#0      NetworkImage._loadAsync (package:flutter/src/painting/_network_image_io.dart:115:9)
+<asynchronous suspension>
+#1      MultiFrameImageStreamCompleter._handleCodecReady (package:flutter/src/painting/image_stream.dart:1013:3)
+<asynchronous suspension>
+Image provider: NetworkImage("https://back.stroybazan1.uz/media/products/thumb-1920-234864.jpg", scale: 1.0)
+Image key: NetworkImage("https://back.stroybazan1.uz/media/products/thumb-1920-234864.jpg", scale: 1.0)
+====================================================================================================
+
+======== Exception caught by widgets library =======================================================
+The following assertion was thrown while finalizing the widget tree:
+Looking up a deactivated widget's ancestor is unsafe.
+
+At this point the state of the widget's element tree is no longer stable.
+
+To safely refer to a widget's ancestor in its dispose() method, save a reference to the ancestor by calling dependOnInheritedWidgetOfExactType() in the widget's didChangeDependencies() method.
+
+When the exception was thrown, this was the stack: 
+#0      Element._debugCheckStateIsActiveForAncestorLookup.<anonymous closure> (package:flutter/src/widgets/framework.dart:4885:9)
+#1      Element._debugCheckStateIsActiveForAncestorLookup (package:flutter/src/widgets/framework.dart:4899:6)
+#2      Element.getElementForInheritedWidgetOfExactType (package:flutter/src/widgets/framework.dart:4935:12)
+#3      Provider._inheritedElementOf (package:provider/src/provider.dart:339:38)
+#4      Provider.of (package:provider/src/provider.dart:293:30)
+#5      ReadContext.read (package:provider/src/provider.dart:649:21)
+#6      _AboutProductState.dispose (package:stroy_baza/presentation/pages/about_product.dart:35:13)
+#7      StatefulElement.unmount (package:flutter/src/widgets/framework.dart:5840:11)
+#8      _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2078:13)
+#9      _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#10     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#11     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#12     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#13     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#14     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#15     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#16     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#17     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#18     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#19     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#20     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#21     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#22     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#23     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#24     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#25     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#26     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#27     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#28     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#29     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#30     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#31     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#32     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#33     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#34     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#35     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#36     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#37     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#38     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#39     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#40     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#41     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#42     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#43     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#44     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#45     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#46     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#47     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#48     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#49     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#50     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#51     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#52     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#53     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#54     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#55     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#56     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#57     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#58     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#59     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#60     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#61     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#62     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#63     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#64     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#65     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#66     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#67     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#68     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#69     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#70     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#71     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#72     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#73     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#74     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#75     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#76     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#77     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#78     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#79     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#80     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#81     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#82     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#83     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#84     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#85     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#86     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#87     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#88     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#89     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#90     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#91     SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#92     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#93     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#94     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#95     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#96     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#97     ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#98     _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#99     _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#100    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#101    _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#102    _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#103    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#104    _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#105    _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#106    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#107    _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#108    _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#109    SingleChildRenderObjectElement.visitChildren (package:flutter/src/widgets/framework.dart:6900:14)
+#110    _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#111    _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#112    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#113    _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#114    _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#115    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#116    _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#117    _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#118    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#119    _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#120    _InactiveElements._unmount.<anonymous closure> (package:flutter/src/widgets/framework.dart:2076:7)
+#121    ComponentElement.visitChildren (package:flutter/src/widgets/framework.dart:5683:14)
+#122    _InactiveElements._unmount (package:flutter/src/widgets/framework.dart:2074:13)
+#123    ListIterable.forEach (dart:_internal/iterable.dart:49:13)
+#124    _InactiveElements._unmountAll (package:flutter/src/widgets/framework.dart:2087:25)
+#125    BuildOwner.lockState (package:flutter/src/widgets/framework.dart:2954:15)
+#126    BuildOwner.finalizeTree (package:flutter/src/widgets/framework.dart:3264:7)
+#127    WidgetsBinding.drawFrame (package:flutter/src/widgets/binding.dart:1183:19)
+#128    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:475:5)
+#129    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1397:15)
+#130    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1318:9)
+#131    SchedulerBinding._handleDrawFrame (package:flutter/src/scheduler/binding.dart:1176:5)
+#132    _invoke (dart:ui/hooks.dart:312:13)
+#133    PlatformDispatcher._drawFrame (dart:ui/platform_dispatcher.dart:427:5)
+#134    _drawFrame (dart:ui/hooks.dart:283:31)
+====================================================================================================

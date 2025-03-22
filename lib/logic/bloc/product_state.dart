@@ -11,7 +11,19 @@ class ProductLoadedState extends ProductState {
   ProductLoadedState(this.products);
 }
 
+// Yangi state qo'shildi
+class SingleProductLoadedState extends ProductState {
+  final Product product;
+  SingleProductLoadedState(this.product);
+}
+
 class ProductErrorState extends ProductState {
   final String message;
   ProductErrorState(this.message);
+}
+
+class ProductSelectedState extends ProductState {
+  final Product product;
+
+  ProductSelectedState(this.product);
 }

@@ -9,6 +9,5 @@ class GetProductByIdEvent extends ProductEvent {
 
 class LoadProductById extends ProductEvent {
   final int id;
-  
   LoadProductById(this.id);
 }

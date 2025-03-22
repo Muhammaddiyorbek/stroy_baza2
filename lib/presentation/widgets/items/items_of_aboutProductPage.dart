@@ -1,66 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:stroy_baza/presentation/widgets/items/item_of_crousel.dart';
 
 /// Product images and indicator
 class ProductCarusel extends StatelessWidget {
-  const ProductCarusel({super.key});
+  final List<String> images;
+
+  const ProductCarusel({
+    super.key,
+    required this.images,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final PageController _controller = PageController();
-    final List<String> images = [
-      'assets/images/penopleks.png',
-      'assets/images/penopleks.png',
-    ];
-    return Container(
-      height: 200,
-      child: Column(
-        children: [
-          Expanded(
-            child: PageView.builder(
-              controller: _controller,
-              itemCount: images.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                  child: Image.asset(
-                    images[index],
-                    fit: BoxFit.contain,
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 32),
-          SmoothPageIndicator(
-            controller: _controller,
-            count: images.length,
-            effect: CustomizableEffect(
-              activeDotDecoration: DotDecoration(
-                width: 16,
-                height: 16,
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(10),
-                dotBorder: DotBorder(
-                  color: Color.fromRGBO(0, 0, 0, 0.55),
-                  width: 1,
-                ),
-              ),
-              dotDecoration: DotDecoration(
-                width: 16,
-                height: 16,
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                dotBorder: DotBorder(
-                  color: Color.fromRGBO(0, 0, 0, 0.55),
-                  width: 1,
-                ),
-              ),
-              spacing: 8, // Indikatorlar orasidagi masofa
-            ),
-          ),
-        ],
+    return FlutterCarousel(
+      options: FlutterCarouselOptions(
+        height: 184.0,
+        showIndicator: true,
+        initialPage: 0,
+        viewportFraction: 0.9,
+        enableInfiniteScroll: true,
+        autoPlay: true,
+        autoPlayInterval: const Duration(seconds: 3),
       ),
+      items: images
+          .map((imageUrl) => Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                                  loadingProgress.expectedTotalBytes!
+                              : null,
+                          color: const Color.fromRGBO(220, 195, 139, 1),
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) => const Center(
+                      child: Icon(Icons.error_outline, color: Colors.red),
+                    ),
+                  ),
+                ),
+              ))
+          .toList(),
     );
   }
 }
@@ -71,7 +64,11 @@ class SelectableImage extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  const SelectableImage({super.key, required this.imagePath, required this.isSelected, required this.onTap});
+  const SelectableImage(
+      {super.key,
+      required this.imagePath,
+      required this.isSelected,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +80,10 @@ class SelectableImage extends StatelessWidget {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Color.fromRGBO(242, 242, 241, 0.65),
-          border: isSelected ? Border.all(color: const Color.fromRGBO(190, 160, 134, 1), width: 1.5) : null,
+          border: isSelected
+              ? Border.all(
+                  color: const Color.fromRGBO(190, 160, 134, 1), width: 1.5)
+              : null,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Image.asset(imagePath, fit: BoxFit.contain),
@@ -98,7 +98,11 @@ class SelectableSize extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
 
-  const SelectableSize({super.key, required this.text, required this.isSelected, required this.onTap});
+  const SelectableSize(
+      {super.key,
+      required this.text,
+      required this.isSelected,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +114,10 @@ class SelectableSize extends StatelessWidget {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: Color.fromRGBO(247, 247, 246, 1),
-          border: isSelected ? Border.all(color: const Color.fromRGBO(190, 160, 134, 1), width: 1.5) : null,
+          border: isSelected
+              ? Border.all(
+                  color: const Color.fromRGBO(190, 160, 134, 1), width: 1.5)
+              : null,
           borderRadius: BorderRadius.circular(5),
         ),
         child: Text(text, style: const TextStyle(fontSize: 16)),
@@ -128,6 +135,7 @@ class InstallmentSelection extends StatelessWidget {
     super.key,
     required this.selectedMonth,
     required this.onSelect,
+    required Map<int, String> monthlyPayments,
   });
 
   @override
@@ -158,7 +166,8 @@ class InstallmentSelection extends StatelessWidget {
                 return GestureDetector(
                   onTap: () => onSelect(month),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 22, vertical: 6),
                     decoration: BoxDecoration(
                       color: isSelected ? Colors.white : Colors.transparent,
                       borderRadius: BorderRadius.circular(5),
@@ -197,7 +206,10 @@ class InstallmentSelection extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 "x 24oy",
-                style: TextStyle(fontSize: 10, color: Colors.black, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
               ),
             ],
           ),
@@ -215,7 +227,8 @@ class DeliveryInfoCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Siz buyurtmani 3 oydan 24 oygacha muddatli to’lov evaziga xarid qilishingiz mumkin.",
+        const Text(
+            "Siz buyurtmani 3 oydan 24 oygacha muddatli to’lov evaziga xarid qilishingiz mumkin.",
             style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
         SizedBox(
           height: 20,
@@ -236,9 +249,18 @@ class DeliveryInfoCard extends StatelessWidget {
                 const Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(text: "Yetkazib berish ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-                      TextSpan(text: "1 kun ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
-                      TextSpan(text: "ichida", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                      TextSpan(
+                          text: "Yetkazib berish ",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w500)),
+                      TextSpan(
+                          text: "1 kun ",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w700)),
+                      TextSpan(
+                          text: "ichida",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w500)),
                     ],
                   ),
                 ),
@@ -246,18 +268,29 @@ class DeliveryInfoCard extends StatelessWidget {
                 const Text.rich(
                   TextSpan(
                     children: [
-                      TextSpan(text: "Agar ", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
-                      TextSpan(text: "5mln ", style: TextStyle(fontWeight: FontWeight.bold)),
                       TextSpan(
-                          text: "so‘mdan ortiq mahsulotga buyurtma bersangiz yetkazib berish VODIY bo‘ylab bepul.",
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                          text: "Agar ",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w500)),
+                      TextSpan(
+                          text: "5mln ",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      TextSpan(
+                          text:
+                              "so‘mdan ortiq mahsulotga buyurtma bersangiz yetkazib berish VODIY bo‘ylab bepul.",
+                          style: TextStyle(
+                              fontSize: 12, fontWeight: FontWeight.w500)),
                     ],
                   ),
                 ),
-                const Divider(height: 24, thickness: 1, color: Color.fromRGBO(213, 213, 213, 1)),
+                const Divider(
+                    height: 24,
+                    thickness: 1,
+                    color: Color.fromRGBO(213, 213, 213, 1)),
                 const Text(
                     "Muddati to‘lovni rasmiylashtirayotganingizda bizdan va hamkorlarimizdan eng maqbul takliflarga ega bo‘lishingiz mumkin.",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                    style:
+                        TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -279,11 +312,15 @@ class DeliveryInfoCard extends StatelessWidget {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Color.fromRGBO(220, 195, 139, 1),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8)),
             ),
             onPressed: () {},
             child: const Text("Savatchaga qo‘shish",
-                style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold)),
           ),
         ),
         const SizedBox(height: 36),
@@ -291,11 +328,16 @@ class DeliveryInfoCard extends StatelessWidget {
           child: RichText(
             text: const TextSpan(
               text: "Powered by ",
-              style: TextStyle(color: Color.fromRGBO(67, 67, 67, 0.81), fontSize: 16, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                  color: Color.fromRGBO(67, 67, 67, 0.81),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500),
               children: [
                 TextSpan(
                   text: "NSD CORPORATION",
-                  style: TextStyle(color: Color.fromRGBO(130, 100, 242, 1), fontWeight: FontWeight.w600),
+                  style: TextStyle(
+                      color: Color.fromRGBO(130, 100, 242, 1),
+                      fontWeight: FontWeight.w600),
                 ),
               ],
             ),

@@ -186,12 +186,18 @@ class _HomePageState extends State<HomePage> {
                                 final product = state.products[index];
                                 return GestureDetector(
                                   onTap: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => AboutProduct(
-                                                productId: product.id,
-                                              ))),
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AboutProduct(
+                                        productId: product.id,
+                                      ),
+                                    ),
+                                  ).then((_) {
+                                    // Sahifadan qaytganda mahsulotlarni qayta yuklash
+                                    context.read<ProductBloc>().add(LoadProducts());
+                                  }),
                                   child: ProductCard(
+                                    key: Key(product.id.toString()),
                                     product: product,
                                     onFavoriteToggle: () {},
                                     onAddToCart: () {},
