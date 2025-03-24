@@ -1,26 +1,28 @@
 import 'dart:convert';
 
-List<Product> productsFromJson(String str) =>
-    List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
+List<Product> productsFromJson(String str) => List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
 
-String productsToJson(List<Product> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String productsToJson(List<Product> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+Product singleProductFromJson(String str) => Product.fromJson(json.decode(str));
+
+String singleProductToJson(Product data) => json.encode(data.toJson());
 
 class Product {
-  int id;
-  List<Variant> variants;
-  int branch;
-  String nameUz;
-  String nameRu;
-  String nameEn;
-  bool isAvailable;
-  String descriptionUz;
-  String descriptionRu;
-  String descriptionEn;
-  String image;
-  int category;
+  final int id;
+  final int branch;
+  final int category;
+  final List<Variant> variants;
+  final String nameUz;
+  final String nameRu;
+  final String nameEn;
+  final bool isAvailable;
+  final String descriptionUz;
+  final String descriptionRu;
+  final String descriptionEn;
+  final String image;
 
-  Product({
+  const Product({
     required this.id,
     required this.variants,
     required this.branch,
@@ -36,25 +38,25 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
-        id: json["id"],
-        variants: List<Variant>.from(
-            json["variants"].map((x) => Variant.fromJson(x))),
-        branch: json["branch"],
-        nameUz: json["name_uz"],
-        nameRu: json["name_ru"],
-        nameEn: json["name_en"],
-        isAvailable: json["is_available"],
-        descriptionUz: json["description_uz"],
-        descriptionRu: json["description_ru"],
-        descriptionEn: json["description_en"],
-        image: json["image"],
-        category: json["category"],
+        id: json["id"] ?? 0,
+        branch: json["branch"] ?? 0,
+        category: json["category"] ?? 0,
+        variants: json["variants"] != null ? List<Variant>.from(json["variants"].map((x) => Variant.fromJson(x))) : [],
+        nameUz: json["name_uz"] ?? '',
+        nameRu: json["name_ru"] ?? '',
+        nameEn: json["name_en"] ?? '',
+        isAvailable: json["is_available"] ?? false,
+        descriptionUz: json["description_uz"] ?? '',
+        descriptionRu: json["description_ru"] ?? '',
+        descriptionEn: json["description_en"] ?? '',
+        image: json["image"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "variants": List<dynamic>.from(variants.map((x) => x.toJson())),
         "branch": branch,
+        "category": category,
+        "variants": variants.map((x) => x.toJson()).toList(),
         "name_uz": nameUz,
         "name_ru": nameRu,
         "name_en": nameEn,
@@ -63,7 +65,6 @@ class Product {
         "description_ru": descriptionRu,
         "description_en": descriptionEn,
         "image": image,
-        "category": category,
       };
 }
 
@@ -103,21 +104,21 @@ class Variant {
   });
 
   factory Variant.fromJson(Map<String, dynamic> json) => Variant(
-        id: json["id"],
-        colorUz: json["color_uz"],
-        colorRu: json["color_ru"],
-        colorEn: json["color_en"],
-        sizeUz: json["size_uz"],
-        sizeRu: json["size_ru"],
-        sizeEn: json["size_en"],
-        price: json["price"],
-        isAvailable: json["is_available"],
-        image: json["image"],
-        monthlyPayment3: json["monthly_payment_3"],
-        monthlyPayment6: json["monthly_payment_6"],
-        monthlyPayment12: json["monthly_payment_12"],
-        monthlyPayment24: json["monthly_payment_24"],
-        product: json["product"],
+        id: json["id"] ?? 0,
+        colorUz: json["color_uz"] ?? '',
+        colorRu: json["color_ru"] ?? '',
+        colorEn: json["color_en"] ?? '',
+        sizeUz: json["size_uz"] ?? '',
+        sizeRu: json["size_ru"] ?? '',
+        sizeEn: json["size_en"] ?? '',
+        price: json["price"] ?? '0',
+        isAvailable: json["is_available"] ?? false,
+        image: json["image"] ?? '',
+        monthlyPayment3: json["monthly_payment_3"] ?? '0',
+        monthlyPayment6: json["monthly_payment_6"] ?? '0',
+        monthlyPayment12: json["monthly_payment_12"] ?? '0',
+        monthlyPayment24: json["monthly_payment_24"] ?? '0',
+        product: json["product"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {

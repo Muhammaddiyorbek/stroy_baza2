@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stroy_baza/presentation/pages/error_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -171,8 +170,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         return AlertDialog(
           contentPadding: EdgeInsets.all(30),
           actionsPadding: EdgeInsets.all(10),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           content: Text(
             "Xaqiqatan ham accountdan chiqilsinmi?",
             textAlign: TextAlign.center,
@@ -185,17 +183,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pop(context);
                 // TODO: Chiqish logikasini qo‘shish
               },
-              child: Text("Ha",
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold)),
+              child: Text("Ha", style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
             ),
             SizedBox(width: 16),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("Yo‘q",
-                  style: TextStyle(color: Colors.black, fontSize: 18)),
+              child: Text("Yo‘q", style: TextStyle(color: Colors.black, fontSize: 18)),
             ),
           ],
         );

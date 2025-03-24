@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stroy_baza/core/router/router.dart';
-import 'package:stroy_baza/presentation/blocs/home/home_bloc.dart';
+import 'package:stroy_baza/presentation/home/blocs/home/home_bloc.dart';
 import 'package:stroy_baza/presentation/blocs/language_bloc/language_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/repository/product_repository.dart';
@@ -28,8 +28,8 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LanguageBloc()..add(FindCurrentLanguageEvent())),
+        BlocProvider(create: (context) => ProductBloc(ProductRepositoryImpl())),
         BlocProvider(create: (context) => HomeBloc()),
-        BlocProvider(create: (context) => ProductBloc(ProductRepository())),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(
         builder: (context, languageState) {
@@ -41,9 +41,9 @@ class MyApp extends StatelessWidget {
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             locale: languageState.locale,
             theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-              useMaterial3: true,
-            ),
+                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+                useMaterial3: true,
+                textTheme: const TextTheme(displayLarge: TextStyle(fontFamily: "Inter"))),
           );
         },
       ),

@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/presentation/pages/Region1.dart';
-import 'package:stroy_baza/presentation/pages/about_product.dart';
-import 'package:stroy_baza/presentation/pages/bottonNavBarPages/profile_page.dart';
-import 'package:stroy_baza/presentation/pages/bottonNavBarPages/search_page.dart';
-import 'package:stroy_baza/presentation/pages/cart_screen.dart';
+import 'package:stroy_baza/presentation/search/pages/about_product.dart';
+import 'package:stroy_baza/presentation/profile/pages/profile_page.dart';
+import 'package:stroy_baza/presentation/search/pages/search_page.dart';
+import 'package:stroy_baza/presentation/basked/pages/cart_screen.dart';
 import 'package:stroy_baza/presentation/pages/home.dart';
-import 'package:stroy_baza/presentation/pages/bottonNavBarPages/home_page.dart';
-import 'package:stroy_baza/presentation/pages/home_product.dart';
+import 'package:stroy_baza/presentation/home/pages/home_page.dart';
+import 'package:stroy_baza/presentation/search/pages/home_product.dart';
 import 'package:stroy_baza/presentation/pages/init.dart';
 import 'package:stroy_baza/presentation/pages/init2.dart';
 import 'package:stroy_baza/presentation/pages/region2.dart';
 
 // Global navigator keys
-final GlobalKey<NavigatorState> _appNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: "app-key");
-final GlobalKey<NavigatorState> _shellNavigatorKey =
-    GlobalKey<NavigatorState>(debugLabel: "shell-key");
+final GlobalKey<NavigatorState> _appNavigatorKey = GlobalKey<NavigatorState>(debugLabel: "app-key");
+final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(debugLabel: "shell-key");
 
 class AppRouteName {
   const AppRouteName._();
@@ -28,6 +26,7 @@ class AppRouteName {
   static const String subHome = "subHome";
   static const String signUp = "signUp";
   static const String homeProduct = "/homeProduct";
+  static const String aboutProduct = "/aboutProduct";
 
   /// Bottom nav bar pages
   static const String main = "/main-screen";
@@ -76,6 +75,15 @@ sealed class AppRouter {
         path: AppRouteName.init2,
         pageBuilder: (context, state) => const CustomTransitionPage(
           child: Init2(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // aboutProduct
+      GoRoute(
+        path: AppRouteName.aboutProduct,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: AboutProduct(productId: 1),
           transitionsBuilder: _fadeTransition,
         ),
       ),

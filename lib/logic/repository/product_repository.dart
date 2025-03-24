@@ -1,21 +1,54 @@
-import 'package:dio/dio.dart';
-import 'package:stroy_baza/app_constats/app_url.dart';
+import 'dart:developer';
+
+import 'package:stroy_baza/core/services/network_service/api.dart';
+import 'package:stroy_baza/core/services/network_service/api_const.dart';
+import 'package:stroy_baza/models/banner_model.dart';
 import 'package:stroy_baza/models/product.dart';
 
-class ProductRepository {
-  final Dio _dio = Dio();
+abstract class ProductRepository {
+  Future<List<Product>> getProduct();
 
-  Future<List<Product>> getProducts() async {
-    try {
-      final response = await _dio.get('${AppUrl.base}/api/api/products/');
-      if (response.statusCode == 200) {
-        final List<dynamic> data = response.data;
-        return data.map((json) => Product.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load products');
-      }
-    } catch (e) {
-      throw Exception('Network error: ${e.toString()}');
+  Future<List<BannerModel>> getBanner();
+
+  Future<Product?> getSingleProduct({required String id});
+}
+
+class ProductRepositoryImpl extends ProductRepository {
+  @override
+  Future<List<Product>> getProduct() async {
+    List<Product> products = [];
+    final res = await ApiService.get(ApiConst.apiProduct, ApiParams.emptyParams());
+    if (res != null && res.isNotEmpty) {
+      products = productsFromJson(res);
+      return products;
+    } else {
+      return [];
+    }
+  }
+
+  @override
+  Future<List<BannerModel>> getBanner() async {
+    List<BannerModel> banners = [];
+    final res = await ApiService.get(ApiConst.apiBanner, ApiParams.emptyParams());
+    if (res != null && res.isNotEmpty) {
+      banners = bannerModelFromJson(res);
+      return banners;
+    } else {
+      return [];
+    }
+  }
+
+  @override
+  Future<Product?> getSingleProduct({required String id}) async {
+    final Product product;
+    final res = await ApiService.get(ApiConst.apiProduct, {"id": id});
+    if (res != null && res.isNotEmpty) {
+      product = singleProductFromJson(res);
+      log("${product.descriptionUz} -- ${product.image} -- ${product.id} -- ${product.isAvailable}");
+      log("${product.variants.length}");
+      return product;
+    } else {
+      return null;
     }
   }
 }

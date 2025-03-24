@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stroy_baza/presentation/blocs/home/home_bloc.dart';
-import 'package:stroy_baza/presentation/blocs/home/home_state.dart';
+import 'package:stroy_baza/presentation/home/blocs/home/home_bloc.dart';
+import 'package:stroy_baza/presentation/home/blocs/home/home_state.dart';
 
 class MainWrapper extends StatelessWidget {
   const MainWrapper({super.key, required this.navigationShell});
