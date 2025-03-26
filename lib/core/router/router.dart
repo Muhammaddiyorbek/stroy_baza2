@@ -103,7 +103,7 @@ sealed class AppRouter {
         pageBuilder: (context, state) {
           final id = state.pathParameters['id'] ?? '';
           return CustomTransitionPage(
-            child: HomeProduct(id: id),
+            child: HomeProduct(),
             transitionsBuilder: _fadeTransition,
           );
         },

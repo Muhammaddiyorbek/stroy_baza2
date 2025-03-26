@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/presentation/search/blocs/search/search_bloc.dart';
 import 'package:stroy_baza/presentation/search/blocs/search/search_event.dart';
 import 'package:stroy_baza/presentation/search/blocs/search/search_state.dart';
@@ -16,9 +17,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-      CategoryBloc()
-        ..add(LoadCategories()),
+      create: (context) => CategoryBloc()..add(LoadCategories()),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -67,7 +66,7 @@ class _SearchPageState extends State<SearchPage> {
                         color: Color.fromRGBO(0, 0, 0, 0.55),
                         size: 24,
                       ),
-                      onTap: () => context.push("/homeProduct/Penoplesk"),
+                      onTap: () => context.push(AppRouteName.homeProduct),
                     ),
                   );
                 },

@@ -3,13 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_event.dart';
-import 'package:stroy_baza/logic/bloc/product_state.dart';
-import 'package:stroy_baza/models/product.dart';
 
 class HomeProduct extends StatefulWidget {
-  final String id;
-
-  const HomeProduct({super.key, required this.id});
+  const HomeProduct({super.key});
 
   @override
   State<HomeProduct> createState() => _HomeProductState();
@@ -19,7 +15,7 @@ class _HomeProductState extends State<HomeProduct> {
   @override
   void initState() {
     super.initState();
-    context.read<ProductBloc>().add(GetProductByIdEvent(widget.id));
+    context.read<ProductBloc>().add(LoadProducts());
   }
 
   @override
@@ -45,119 +41,83 @@ class _HomeProductState extends State<HomeProduct> {
           ),
         ),
       ),
-      body: BlocBuilder<ProductBloc, ThisBlocState>(
-        builder: (context, state) {
-          if (state is ProductLoadingState) {
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Color.fromRGBO(220, 195, 139, 1),
-              ),
-            );
-          }
-
-          if (state is ProductLoadedState && state.products.isNotEmpty) {
-            final Product product = state.products.first;
-            return SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.network(
-                    product.image,
-                    width: double.infinity,
-                    height: 300,
-                    fit: BoxFit.cover,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          product.nameUz,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          product.descriptionUz,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        const Text(
-                          'Variantlar:',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: product.variants.length,
-                          itemBuilder: (context, index) {
-                            final variant = product.variants[index];
-                            return Card(
-                              child: ListTile(
-                                leading: Image.network(
-                                  variant.image,
-                                  width: 50,
-                                  height: 50,
-                                  fit: BoxFit.cover,
-                                ),
-                                title: Text(
-                                  '${variant.colorUz} - ${variant.sizeUz}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                subtitle: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Narxi: ${variant.price}'),
-                                    Text(
-                                      'Mavjud: ${variant.isAvailable ? "Ha" : "Yo\'q"}',
-                                    ),
-                                  ],
-                                ),
-                                trailing: ElevatedButton(
-                                  onPressed: () {
-                                    // TODO: Add to cart logic
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
-                                  ),
-                                  child: const Text(
-                                    'Savatga',
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          if (state is ProductErrorState) {
-            return Center(
-              child: Text(state.errorMSg),
-            );
-          }
-
-          return const SizedBox();
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+            child: Container(
+              color: Colors.red,
+              height: 50,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+            child: Container(
+              color: Colors.red,
+              height: 50,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+            child: Container(
+              color: Colors.red,
+              height: 50,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+            child: Container(
+              color: Colors.red,
+              height: 50,
+            ),
+          ),
+        ],
       ),
+      // body: BlocBuilder<ProductBloc, ThisBlocState>(
+      //   builder: (context, state) {
+      //     return Column(
+      //       children: [
+      //         if (state.productStatus.isSuccess) ...{
+      //           if (state.products.isEmpty) ...{
+      //             const Center(
+      //               child: Text(
+      //                 "No product available",
+      //                 style: TextStyle(color: Colors.black),
+      //               ),
+      //             ),
+      //           },
+      //           Padding(
+      //             padding: const EdgeInsets.symmetric(horizontal: 22.0),
+      //             child: GridView.builder(
+      //               itemCount: state.products.length,
+      //               shrinkWrap: true,
+      //               physics: const NeverScrollableScrollPhysics(),
+      //               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      //                 crossAxisCount: 2,
+      //                 mainAxisSpacing: 18,
+      //                 crossAxisSpacing: 18,
+      //                 mainAxisExtent: 250,
+      //               ),
+      //               itemBuilder: (context, index) {
+      //                 final product = state.products[index];
+      //                 return GestureDetector(
+      //                   onTap: () => Navigator.push(
+      //                     context,
+      //                     MaterialPageRoute(builder: (context) => AboutProduct(productId: product.id)),
+      //                   ),
+      //                   child: ProductCard(
+      //                     product: product,
+      //                     onFavoriteToggle: () {},
+      //                   ),
+      //                 );
+      //               },
+      //             ),
+      //           ),
+      //         },
+      //       ],
+      //     );
+      //   },
+      // ),
     );
   }
 }
