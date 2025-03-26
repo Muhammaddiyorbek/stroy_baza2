@@ -4,7 +4,9 @@
 
   "helloWorld": "Сәлем Әлем",
   "changeLanguage": "Тілді өзгерту",
-   "areUFromAnd" : "Сиз Андижон шаҳриданмисиз ?",
+   "areUFromAnd" : "Сиз шаҳриданмисиз ?",
+   "you": "Siz",
+   "city" : "shahridanmisiz ?",
    "detectProductAndDelivery":"Tанланган xудудга қараб етказиб бериш усули \nва маxсулот мавжудлиги белгиланади",
    "yes": "Xа",
    "nochange": "Йўқ, ўзгартиринг"

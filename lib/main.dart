@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stroy_baza/core/router/router.dart';
-import 'package:stroy_baza/presentation/home/blocs/home/home_bloc.dart';
+import 'package:stroy_baza/logic/repository/city_responsitory.dart';
+import 'package:stroy_baza/presentation/blocs/city/city_bloc.dart';
 import 'package:stroy_baza/presentation/blocs/language_bloc/language_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/repository/product_repository.dart';
+import 'package:stroy_baza/presentation/home/blocs/home_bloc.dart';
 
 import 'main.dart';
 export "package:flutter_gen/gen_l10n/app_localizations.dart";
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => LanguageBloc()..add(FindCurrentLanguageEvent())),
         BlocProvider(create: (context) => ProductBloc(ProductRepositoryImpl())),
         BlocProvider(create: (context) => HomeBloc()),
+        BlocProvider(create: (context) => CityBloc(CityRepository())),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(
         builder: (context, languageState) {

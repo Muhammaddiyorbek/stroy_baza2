@@ -2,8 +2,10 @@
   "@@locale": "ru",
   "helloWorld": "Привет, мир",
   "changeLanguage": "Изменить язык",
-   "areUFromAnd" : " Вы из города Андижан ?",
-    "detectProductAndDelivery":"Способ доставки и наличие товара зависят от выбранного региона",
-    "yes":"Да",
-    "nochange":"Нет, измените"
+  "you": "Siz",
+  "city" : "shahridanmisiz ?",
+  "areUFromAnd" : " Вы из города ?",
+  "detectProductAndDelivery":"Способ доставки и наличие товара зависят\n от выбранного региона",
+  "yes":"Да",
+  "nochange":"Нет, измените"
 }

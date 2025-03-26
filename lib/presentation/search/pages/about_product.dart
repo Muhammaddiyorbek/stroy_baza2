@@ -5,7 +5,6 @@ import 'package:formz/formz.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_event.dart';
 import 'package:stroy_baza/logic/bloc/product_state.dart';
-import 'package:stroy_baza/models/product.dart';
 import 'package:stroy_baza/presentation/home/widgets/items_of_aboutProductPage.dart';
 
 class AboutProduct extends StatefulWidget {
@@ -29,6 +28,11 @@ class _AboutProductState extends State<AboutProduct> {
 
   @override
   Widget build(BuildContext context) {
+    // final productId = widget.productId;
+    // if (productId == 0) {
+    //   return const Center(child: Text('Mahsulot topilmadi'));
+    // }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -104,15 +108,14 @@ class _AboutProductState extends State<AboutProduct> {
                     child: Row(
                       children: List.generate(
                         product.variants.length,
-                            (index) =>
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: SelectableImage(
-                                imagePath: "https://back.stroybazan1.uz${product.variants[index].image}",
-                                isSelected: index == selectedVariant,
-                                onTap: () => setState(() => selectedVariant = index),
-                              ),
-                            ),
+                        (index) => Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: SelectableImage(
+                            imagePath: "https://back.stroybazan1.uz${product.variants[index].image}",
+                            isSelected: index == selectedVariant,
+                            onTap: () => setState(() => selectedVariant = index),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -127,15 +130,14 @@ class _AboutProductState extends State<AboutProduct> {
                     child: Row(
                       children: List.generate(
                         product.variants.length,
-                            (index) =>
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: SelectableSize(
-                                text: product.variants[index].sizeUz,
-                                isSelected: index == selectedVariant,
-                                onTap: () => setState(() => selectedVariant = index),
-                              ),
-                            ),
+                        (index) => Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: SelectableSize(
+                            text: product.variants[index].sizeUz,
+                            isSelected: index == selectedVariant,
+                            onTap: () => setState(() => selectedVariant = index),
+                          ),
+                        ),
                       ),
                     ),
                   ),

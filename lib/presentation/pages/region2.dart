@@ -1,72 +1,107 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+import 'package:stroy_baza/models/city_select.dart';
+import 'package:stroy_baza/presentation/blocs/city/city_bloc.dart';
+import 'package:stroy_baza/presentation/blocs/city/city_event.dart';
+import 'package:stroy_baza/presentation/blocs/city/city_state.dart';
 
-class Region2 extends StatefulWidget {
-  const Region2({super.key});
+class CitySelectionPage extends StatelessWidget {
+  const CitySelectionPage({super.key});
 
-  @override
-  State<Region2> createState() => _Region2State();
-}
-
-class _Region2State extends State<Region2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(220, 195, 139, 1),
-        title: Text(
-          "Yetkazib berish shahrini tanlang",
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+        automaticallyImplyLeading: false,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22.0),
+          child: const Text(
+            "Yetkazib berish shahrini tanlang",
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
+        backgroundColor: Color.fromRGBO(220, 195, 139, 1),
       ),
-      body: Padding(
-        padding: EdgeInsets.only(left: 22, top: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildCityButton("Toshkent shahri"),
-            SizedBox(height: 50),
-            _buildCityButton("Andijon shahri"),
-            SizedBox(height: 50),
-            _buildCityButton("Farg’ona shahri"),
-            SizedBox(height: 50),
-            _buildCityButton("Namangan shahri"),
-            
-            Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    const Text("Powered by", style: TextStyle(color: Color.fromRGBO(67, 67, 67, 0.81), fontSize: 16, fontWeight: FontWeight.w500),),
-                    const SizedBox(width: 5,),
-                    GestureDetector(
-                        onTap: (){},
-                        child: const Text("NSD CORPORATION",style: TextStyle(color: Color.fromRGBO(130, 100, 242, 1), fontSize: 16, fontWeight: FontWeight.w500),)
-                    ),
-                  ],
-                ),
-            ),
-            SizedBox(height: 20,),
-          ],
-        ),
-      ),
-    );
-  }
+      body: Column(
+        children: [
+          Expanded(
+            child: BlocBuilder<CityBloc, CityState>(
+              builder: (context, state) {
+                if (state.cityStatus == FormzSubmissionStatus.inProgress) {
+                  return const Center(
+                      child: CupertinoActivityIndicator(
+                    color: Color.fromRGBO(220, 195, 139, 1),
+                  ));
+                } else if (state.cityStatus == FormzSubmissionStatus.success) {
+                  return ListView.builder(
+                    itemCount: state.cities.length,
+                    itemBuilder: (context, index) {
+                      City city = state.cities[index];
 
-  Widget _buildCityButton(String cityName) {
-    return GestureDetector(
-      onTap: () {},
-      child: Text(
-        cityName,
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-        ),
+                      return Column(
+                        children: [
+                          SizedBox(
+                            height: 45,
+                          ),
+                          ListTile(
+                            title: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 22),
+                              child: Text(city.nameUz),
+                            ),
+                            onTap: () {
+                              context.read<CityBloc>().add(SelectCity(city));
+                              Navigator.pop(context);
+                            },
+                          ),
+                          const SizedBox(height: 50),
+                        ],
+                      );
+                    },
+                  );
+                } else if (state.cityStatus == FormzSubmissionStatus.failure) {
+                  return Center(child: Text(state.errorMsg));
+                } else {
+                  return const Center(child: Text("Ma'lumot yo‘q"));
+                }
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const Text(
+                  "Powered by",
+                  style: TextStyle(
+                    color: Color.fromRGBO(67, 67, 67, 0.81),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                GestureDetector(
+                  onTap: () {},
+                  child: const Text(
+                    "NSD CORPORATION",
+                    style: TextStyle(
+                      color: Color.fromRGBO(130, 100, 242, 1),
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

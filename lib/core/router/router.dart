@@ -25,8 +25,8 @@ class AppRouteName {
   static const String region2 = "/region2";
   static const String subHome = "subHome";
   static const String signUp = "signUp";
-  static const String homeProduct = "/homeProduct";
-  static const String aboutProduct = "/aboutProduct";
+  static const String homeProduct = "homeProduct";
+  static const String aboutProduct = "aboutProduct";
 
   /// Bottom nav bar pages
   static const String main = "/main-screen";
@@ -55,7 +55,7 @@ sealed class AppRouter {
       // Region1
       GoRoute(
         path: AppRouteName.region1,
-        pageBuilder: (context, state) => const CustomTransitionPage(
+        pageBuilder: (context, state) => CustomTransitionPage(
           child: Region1(),
           transitionsBuilder: _fadeTransition,
         ),
@@ -64,8 +64,8 @@ sealed class AppRouter {
       // Region2
       GoRoute(
         path: AppRouteName.region2,
-        pageBuilder: (context, state) => const CustomTransitionPage(
-          child: Region2(),
+        pageBuilder: (context, state) => CustomTransitionPage(
+          child: CitySelectionPage(),
           transitionsBuilder: _fadeTransition,
         ),
       ),
@@ -101,8 +101,8 @@ sealed class AppRouter {
       GoRoute(
         path: "/product/:id",
         pageBuilder: (context, state) {
-          final id = state.pathParameters['id'] ?? '';
-          return CustomTransitionPage(
+          //final id = state.pathParameters['id'] ?? '';
+          return const CustomTransitionPage(
             child: HomeProduct(),
             transitionsBuilder: _fadeTransition,
           );

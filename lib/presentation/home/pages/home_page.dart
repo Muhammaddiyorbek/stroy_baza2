@@ -132,7 +132,10 @@ class _HomePageState extends State<HomePage> {
                         ),
 
                         if (state.bannerStatus.isInProgress || state.bannerStatus.isInitial) ...{
-                          const Center(child: CupertinoActivityIndicator()),
+                          const Center(
+                              child: CupertinoActivityIndicator(
+                            color: Color.fromRGBO(220, 195, 139, 1),
+                          )),
                         },
                         if (state.bannerStatus.isSuccess) ...{
                           FlutterCarousel(
@@ -176,7 +179,10 @@ class _HomePageState extends State<HomePage> {
                         },
                         if (state.productStatus.isInProgress) ...{
                           /// Todo draw failure ui with stateless widget with shimmer
-                          const Center(child: CupertinoActivityIndicator()),
+                          const Center(
+                              child: CupertinoActivityIndicator(
+                            color: Color.fromRGBO(220, 195, 139, 1),
+                          )),
                         },
 
                         if (state.productStatus.isSuccess) ...{

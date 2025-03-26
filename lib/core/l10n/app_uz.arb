@@ -4,8 +4,9 @@
 
   "helloWorld": "Salom Dunyo",
   "changeLanguage": "Tilni o'zgartirish",
-  "areUFromAnd" : "Siz Andijon shahridanmisiz",
-  "detectProductAndDelivery":"Tanlangan hududga qarab yetkazib berish usuli va mahsulot mavjudligi belgilanadi",
+  "you": "Siz",
+  "city" : " shahridanmisiz ?",
+  "detectProductAndDelivery":"Tanlangan hududga qarab yetkazib berish usuli\n va mahsulot mavjudligi belgilanadi",
   "yes": "Ha",
   "nochange": "Yo'q, o'zgartirish"
 }
