@@ -9,7 +9,6 @@ import 'package:stroy_baza/presentation/blocs/language_bloc/language_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/repository/product_repository.dart';
 import 'package:stroy_baza/presentation/home/blocs/home_bloc.dart';
-
 import 'main.dart';
 export "package:flutter_gen/gen_l10n/app_localizations.dart";
 
@@ -39,17 +38,26 @@ class MyApp extends StatelessWidget {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             routerConfig: AppRouter.router,
-            title: 'Flutter Demo',
+            title: 'Stroy baza',
             supportedLocales: AppLocalizations.supportedLocales,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             locale: languageState.locale,
-            theme: ThemeData(
-                colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-                useMaterial3: true,
-                textTheme: const TextTheme(displayLarge: TextStyle(fontFamily: "Inter"))),
+            theme: LightTheme.light(),
           );
         },
       ),
     );
   }
+}
+
+
+
+abstract class LightTheme{
+  static ThemeData light()=> ThemeData(
+    textTheme: const TextTheme(
+      labelMedium: TextStyle(fontFamily: "Inter"),
+      labelSmall: TextStyle(fontFamily: "Inter"),
+      labelLarge: TextStyle(fontFamily: "Inter"),
+    )
+  );
 }

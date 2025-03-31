@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_event.dart';
+import 'package:stroy_baza/logic/bloc/product_state.dart';
 
 class HomeProduct extends StatefulWidget {
   const HomeProduct({super.key});
@@ -12,10 +13,14 @@ class HomeProduct extends StatefulWidget {
 }
 
 class _HomeProductState extends State<HomeProduct> {
+  late final ThisBlocState state;
+  
+  
   @override
   void initState() {
+    state = context.read<ProductBloc>().state;
+    context.read<ProductBloc>().add(LoadProducts(state.section.branch));
     super.initState();
-    context.read<ProductBloc>().add(LoadProducts());
   }
 
   @override

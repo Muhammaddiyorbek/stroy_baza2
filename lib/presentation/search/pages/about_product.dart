@@ -5,12 +5,13 @@ import 'package:formz/formz.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_event.dart';
 import 'package:stroy_baza/logic/bloc/product_state.dart';
+import 'package:stroy_baza/models/product.dart';
 import 'package:stroy_baza/presentation/home/widgets/items_of_aboutProductPage.dart';
 
 class AboutProduct extends StatefulWidget {
-  final int productId;
+  final Product product;
 
-  const AboutProduct({super.key, required this.productId});
+  const AboutProduct({super.key, required this.product});
 
   @override
   State<AboutProduct> createState() => _AboutProductState();
@@ -23,16 +24,11 @@ class _AboutProductState extends State<AboutProduct> {
   @override
   void initState() {
     super.initState();
-    context.read<ProductBloc>().add(LoadProductById(widget.productId));
+    context.read<ProductBloc>().add(LoadProductById(widget.product.id));
   }
 
   @override
   Widget build(BuildContext context) {
-    // final productId = widget.productId;
-    // if (productId == 0) {
-    //   return const Center(child: Text('Mahsulot topilmadi'));
-    // }
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -59,18 +55,19 @@ class _AboutProductState extends State<AboutProduct> {
 
           if (state.singleProductStatus.isFailure) {
             return const Center(
-              child: Text("Something went wrong at load data"),
+              child: Text("Mahsulot yuklanishda xatolik yuz berdi"),
             );
           }
 
           final product = state.singleProduct;
-          final variant = product.variants[selectedVariant];
 
           if (product.variants.isEmpty) {
             return const Center(
               child: Text('Mahsulot variantlari mavjud emas'),
             );
           }
+
+          final variant = product.variants[selectedVariant];
 
           final images = [
             "https://back.stroybazan1.uz${variant.image}",
@@ -108,7 +105,7 @@ class _AboutProductState extends State<AboutProduct> {
                     child: Row(
                       children: List.generate(
                         product.variants.length,
-                        (index) => Padding(
+                            (index) => Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: SelectableImage(
                             imagePath: "https://back.stroybazan1.uz${product.variants[index].image}",
@@ -130,7 +127,7 @@ class _AboutProductState extends State<AboutProduct> {
                     child: Row(
                       children: List.generate(
                         product.variants.length,
-                        (index) => Padding(
+                            (index) => Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: SelectableSize(
                             text: product.variants[index].sizeUz,

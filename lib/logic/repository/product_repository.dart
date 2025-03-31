@@ -6,7 +6,7 @@ import 'package:stroy_baza/models/banner_model.dart';
 import 'package:stroy_baza/models/product.dart';
 
 abstract class ProductRepository {
-  Future<List<Product>> getProduct();
+  Future<List<Product>> getProduct({required int branch});
 
   Future<List<BannerModel>> getBanner();
 
@@ -15,9 +15,9 @@ abstract class ProductRepository {
 
 class ProductRepositoryImpl extends ProductRepository {
   @override
-  Future<List<Product>> getProduct() async {
+  Future<List<Product>> getProduct({required int branch}) async {
     List<Product> products = [];
-    final res = await ApiService.get(ApiConst.apiProduct, ApiParams.emptyParams());
+    final res = await ApiService.get(ApiConst.apiProduct, ApiParams.productBranchParam(branch));
     if (res != null && res.isNotEmpty) {
       products = productsFromJson(res);
       return products;
@@ -41,7 +41,7 @@ class ProductRepositoryImpl extends ProductRepository {
   @override
   Future<Product?> getSingleProduct({required String id}) async {
     final Product product;
-    final res = await ApiService.get(ApiConst.apiProduct, {"id": id});
+    final res = await ApiService.get("${ApiConst.apiSingleProduct}$id/", ApiParams.emptyParams());
     if (res != null && res.isNotEmpty) {
       product = singleProductFromJson(res);
       log("${product.descriptionUz} -- ${product.image} -- ${product.id} -- ${product.isAvailable}");

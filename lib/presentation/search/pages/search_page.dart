@@ -21,28 +21,26 @@ class _SearchPageState extends State<SearchPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Color.fromRGBO(220, 195, 139, 1),
+          backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
           toolbarHeight: 80,
           title: BlocBuilder<CategoryBloc, CategoryState>(
             builder: (context, state) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: Container(
-                  height: 50,
-                  child: TextField(
-                    onChanged: (query) {
-                      context.read<CategoryBloc>().add(SearchCategory(query));
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'Qidirish',
-                      hintStyle: TextStyle(fontSize: 15, color: Color.fromRGBO(0, 0, 0, 0.55)),
-                      prefixIcon: const Icon(Icons.search, color: Color.fromRGBO(0, 0, 0, 0.55)),
-                      filled: true,
-                      fillColor: Colors.white,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
+                child: TextField(
+                  onChanged: (query) {
+                    /// TODO [bouncing logic function add]
+                    context.read<CategoryBloc>().add(SearchCategory(query));
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Qidirish',
+                    hintStyle: const TextStyle(fontSize: 15, color: Color.fromRGBO(0, 0, 0, 0.55)),
+                    prefixIcon: const Icon(Icons.search, color: Color.fromRGBO(0, 0, 0, 0.55)),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
@@ -59,20 +57,18 @@ class _SearchPageState extends State<SearchPage> {
                   return Padding(
                     padding: const EdgeInsets.only(left: 5.0),
                     child: ListTile(
-                      title: Text(state.filteredCategories[index],
-                          style: TextStyle(fontSize: 20, color: Color.fromRGBO(0, 0, 0, 0.55))),
-                      trailing: Icon(
-                        Icons.chevron_right,
-                        color: Color.fromRGBO(0, 0, 0, 0.55),
-                        size: 24,
+                      title: Text(
+                        state.filteredCategories[index],
+                        style: const TextStyle(fontSize: 20, color: Color.fromRGBO(0, 0, 0, 0.55)),
                       ),
-                      onTap: () => context.push(AppRouteName.homeProduct),
+                      trailing: const Icon(Icons.chevron_right, color: Color.fromRGBO(0, 0, 0, 0.55), size: 24),
+                      onTap: () => context.push("${AppRouteName.search}/${AppRouteName.homeProduct}"),
                     ),
                   );
                 },
               );
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           },
         ),
       ),

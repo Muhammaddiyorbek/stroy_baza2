@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/models/product.dart';
 import 'package:stroy_baza/presentation/pages/Region1.dart';
 import 'package:stroy_baza/presentation/search/pages/about_product.dart';
 import 'package:stroy_baza/presentation/profile/pages/profile_page.dart';
@@ -55,7 +56,7 @@ sealed class AppRouter {
       // Region1
       GoRoute(
         path: AppRouteName.region1,
-        pageBuilder: (context, state) => CustomTransitionPage(
+        pageBuilder: (context, state) => const CustomTransitionPage(
           child: Region1(),
           transitionsBuilder: _fadeTransition,
         ),
@@ -64,7 +65,7 @@ sealed class AppRouter {
       // Region2
       GoRoute(
         path: AppRouteName.region2,
-        pageBuilder: (context, state) => CustomTransitionPage(
+        pageBuilder: (context, state) => const CustomTransitionPage(
           child: CitySelectionPage(),
           transitionsBuilder: _fadeTransition,
         ),
@@ -79,15 +80,6 @@ sealed class AppRouter {
         ),
       ),
 
-      // aboutProduct
-      GoRoute(
-        path: AppRouteName.aboutProduct,
-        pageBuilder: (context, state) => const CustomTransitionPage(
-          child: AboutProduct(productId: 1),
-          transitionsBuilder: _fadeTransition,
-        ),
-      ),
-
       // SignUp
       GoRoute(
         path: AppRouteName.signUp,
@@ -97,26 +89,11 @@ sealed class AppRouter {
         ),
       ),
 
-      // Home Product
-      GoRoute(
-        path: "/product/:id",
-        pageBuilder: (context, state) {
-          //final id = state.pathParameters['id'] ?? '';
-          return const CustomTransitionPage(
-            child: HomeProduct(),
-            transitionsBuilder: _fadeTransition,
-          );
-        },
-      ),
-
       // Stateful Shell Route for bottom navigation pages
       StatefulShellRoute.indexedStack(
         parentNavigatorKey: _appNavigatorKey,
-        builder: (context, state, navigationShell) {
-          return MainWrapper(navigationShell: navigationShell);
-        },
+        builder: (context, state, navigationShell) => MainWrapper(navigationShell: navigationShell),
         branches: [
-          // Home branch
           StatefulShellBranch(
             navigatorKey: _shellNavigatorKey,
             routes: [
@@ -127,6 +104,18 @@ sealed class AppRouter {
                   transitionsBuilder: _fadeTransition,
                   transitionDuration: Duration(seconds: 2),
                 ),
+                routes: [
+                  GoRoute(
+                    parentNavigatorKey: _appNavigatorKey,
+                    path: AppRouteName.aboutProduct,
+                    pageBuilder: (context, state) {
+                      return CustomTransitionPage(
+                        child: AboutProduct(product: state.extra as Product),
+                        transitionsBuilder: _fadeTransition,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -134,13 +123,25 @@ sealed class AppRouter {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: AppRouteName.search,
-                pageBuilder: (context, state) => const CustomTransitionPage(
-                  child: SearchPage(),
-                  transitionsBuilder: _fadeTransition,
-                  transitionDuration: Duration(seconds: 2),
-                ),
-              ),
+                  path: AppRouteName.search,
+                  pageBuilder: (context, state) => const CustomTransitionPage(
+                        child: SearchPage(),
+                        transitionsBuilder: _fadeTransition,
+                        transitionDuration: Duration(seconds: 2),
+                      ),
+                  routes: [
+                    GoRoute(
+                      parentNavigatorKey: _appNavigatorKey,
+                      path: AppRouteName.homeProduct,
+                      pageBuilder: (context, state) {
+                        //final id = state.pathParameters['id'] ?? '';
+                        return const CustomTransitionPage(
+                          child: HomeProduct(),
+                          transitionsBuilder: _fadeTransition,
+                        );
+                      },
+                    ),
+                  ]),
             ],
           ),
           // Box branch

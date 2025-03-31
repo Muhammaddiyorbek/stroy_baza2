@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:stroy_baza/core/utils/enums.dart';
 import 'package:stroy_baza/models/banner_model.dart';
 import 'package:stroy_baza/models/product.dart';
+
 
 class ThisBlocState extends Equatable {
   final List<Product> products;
@@ -11,8 +13,9 @@ class ThisBlocState extends Equatable {
   final FormzSubmissionStatus bannerStatus;
   final FormzSubmissionStatus productStatus;
   final FormzSubmissionStatus singleProductStatus;
-
+  final SectionEnum section;
   const ThisBlocState({
+    this.section =SectionEnum.base,
     this.bannerStatus = FormzSubmissionStatus.initial,
     this.singleProductStatus = FormzSubmissionStatus.initial,
     this.productStatus = FormzSubmissionStatus.initial,
@@ -36,6 +39,7 @@ class ThisBlocState extends Equatable {
   });
 
   ThisBlocState copyWith({
+    SectionEnum? section,
     List<Product>? products,
     List<BannerModel>? banners,
     String? errorMSg,
@@ -45,6 +49,7 @@ class ThisBlocState extends Equatable {
     FormzSubmissionStatus? singleProductStatus,
   }) =>
       ThisBlocState(
+        section: section ?? this.section,
         banners: banners ?? this.banners,
         bannerStatus: bannerStatus ?? this.bannerStatus,
         productStatus: productStatus ?? this.productStatus,
@@ -56,6 +61,7 @@ class ThisBlocState extends Equatable {
 
   @override
   List<Object?> get props => [
+    section,
         banners,
         products,
         singleProductStatus,
@@ -66,33 +72,3 @@ class ThisBlocState extends Equatable {
       ];
 }
 
-abstract class ProductState {}
-
-class ProductInitialState extends ProductState {}
-
-class ProductLoadingState extends ProductState {}
-
-class ProductLoadedState extends ProductState {
-  final List<Product> products;
-
-  ProductLoadedState(this.products);
-}
-
-// Yangi state qo'shildi
-class SingleProductLoadedState extends ProductState {
-  final Product product;
-
-  SingleProductLoadedState(this.product);
-}
-
-class ProductErrorState extends ProductState {
-  final String message;
-
-  ProductErrorState(this.message);
-}
-
-class ProductSelectedState extends ProductState {
-  final Product product;
-
-  ProductSelectedState(this.product);
-}

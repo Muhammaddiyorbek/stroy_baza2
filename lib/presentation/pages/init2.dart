@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/core/router/router.dart';
+import 'package:stroy_baza/core/utils/enums.dart';
+import 'package:stroy_baza/logic/bloc/product_bloc.dart';
+import 'package:stroy_baza/logic/bloc/product_event.dart';
 
 class Init2 extends StatefulWidget {
   const Init2({super.key});
@@ -10,11 +14,7 @@ class Init2 extends StatefulWidget {
 }
 
 class _Init2State extends State<Init2> {
-  List<Map<String, String>> contents = [
-    {"image": "assets/images/mebel.png", "title": "Mebel"},
-    {"image": "assets/images/stroy.png", "title": "Stroy Baza №1"},
-    {"image": "assets/images/klinker.png", "title": "Gold Klinker"},
-  ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,17 @@ class _Init2State extends State<Init2> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ...List.generate(
-              contents.length,
+              SectionEnum.values.length,
                   (index) {
-                final item = contents[index];
+                final section = SectionEnum.values[index];
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 31.0, vertical: 10),
                   child: MaterialButton(
-                    onPressed: () => context.go(AppRouteName.main),
+                    onPressed: () {
+                      ///Bloc func, save event, item.name => state save
+                      context.read<ProductBloc>().add(SaveSectionEvent(section: section));
+                      context.go(AppRouteName.main);
+                    },
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(5),
                       side: const BorderSide(
@@ -42,10 +46,10 @@ class _Init2State extends State<Init2> {
                     child: Row(
                       children: [
                         const SizedBox(width: 30),
-                        Image.asset(item["image"]!),
+                        Image.asset(section.icon),
                         const SizedBox(width: 31),
                         Text(
-                          item["title"]!,
+                          section.name,
                           style: const TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w500),
                         ),
                       ],

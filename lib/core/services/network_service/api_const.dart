@@ -7,6 +7,7 @@ final class ApiConst {
 
   static const String baseUrl = "https://back.stroybazan1.uz";
   static const String apiProduct = "/api/api/products/";
+  static const String apiSingleProduct = "/api/api/products/";
   static const String apiBanner = "/api/api/banners/";
 
 // Query parameters
@@ -37,9 +38,7 @@ final class ApiParams {
   // Empty parameter map when no additional parameters are needed
   static Map<String, dynamic> emptyParams() => <String, dynamic>{};
 
-  static Map<String, dynamic> productBranchParam(int branch) => <String, dynamic>{
-        "branch": branch,
-      };
+  static Map<String, dynamic> productBranchParam(int branch) => <String, dynamic>{"branch": branch};
 
   // Query parameters for requesting a movie list with pagination
   static Map<String, dynamic> param({required int page}) => {};

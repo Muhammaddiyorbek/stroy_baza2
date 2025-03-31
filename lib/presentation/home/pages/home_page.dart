@@ -1,8 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:formz/formz.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/core/router/router.dart';
+import 'package:stroy_baza/core/utils/enums.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_event.dart';
 import 'package:stroy_baza/logic/bloc/product_state.dart';
@@ -18,14 +24,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _selectedCategory = "Stroy Baza №1";
+  late ThisBlocState state;
   final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    context.read<ProductBloc>().add(GetBannerEvent());
-    context.read<ProductBloc>().add(LoadProducts());
+    state = context.read<ProductBloc>().state;
+    context.read<ProductBloc>().add(GetBannerEvent(branch: state.section.branch));
+    context.read<ProductBloc>().add(LoadProducts(state.section.branch));
   }
 
   @override
@@ -60,30 +67,25 @@ class _HomePageState extends State<HomePage> {
                       width: 77,
                     ),
 
-                    SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
 
                     /// Search
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 22.0),
-                      child: Container(
-                        height: 50,
-                        child: TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Qidirish',
-                            hintStyle: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.55), fontFamily: 'Inter'),
-                            prefixIcon: const Icon(
-                              Icons.search,
-                              color: Color.fromRGBO(0, 0, 0, 0.55),
-                              size: 26,
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide.none,
-                            ),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: TextField(
+                        decoration: InputDecoration(
+                          hintText: 'Qidirish',
+                          hintStyle: const TextStyle(color: Color.fromRGBO(0, 0, 0, 0.55), fontFamily: 'Inter'),
+                          prefixIcon: const Icon(
+                            Icons.search,
+                            color: Color.fromRGBO(0, 0, 0, 0.55),
+                            size: 26,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
                           ),
                         ),
                       ),
@@ -96,37 +98,35 @@ class _HomePageState extends State<HomePage> {
               Expanded(
                 child: RefreshIndicator(
                   onRefresh: () async {
-                    context.read<ProductBloc>().add(LoadProducts());
+                    context.read<ProductBloc>().add(LoadProducts(state.section.branch));
                   },
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 22,
-                            vertical: 20,
+                        Container(
+                          width: double.infinity,
+                          height: 50,
+                          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(color: const Color.fromRGBO(136, 121, 121, 0.55)),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Container(
-                            width: double.infinity,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border.all(
-                                color: const Color.fromRGBO(136, 121, 121, 0.55),
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                              child: Row(
-                                children: [
-                                  _buildCategoryItem("Stroy Baza №1"),
-                                  _buildCategoryItem("Mebel"),
-                                  _buildCategoryItem("Gold Klinker"),
-                                ],
-                              ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ...List.generate(
+                                  SectionEnum.values.length,
+                                  (i) => _buildCategoryItem(
+                                    SectionEnum.values[i],
+                                    state,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -161,9 +161,7 @@ class _HomePageState extends State<HomePage> {
                         },
 
                         const Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 22,
-                          ),
+                          padding: EdgeInsets.only(left: 16),
                           child: Text(
                             "Tavsiya etilgan maxsulotlar",
                             style: TextStyle(
@@ -179,10 +177,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         if (state.productStatus.isInProgress) ...{
                           /// Todo draw failure ui with stateless widget with shimmer
-                          const Center(
-                              child: CupertinoActivityIndicator(
-                            color: Color.fromRGBO(220, 195, 139, 1),
-                          )),
+                          const Center(child: CupertinoActivityIndicator(color: Colors.blue)),
                         },
 
                         if (state.productStatus.isSuccess) ...{
@@ -195,28 +190,21 @@ class _HomePageState extends State<HomePage> {
                             ),
                           },
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
                             child: GridView.builder(
                               itemCount: state.products.length,
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
-                                mainAxisSpacing: 18,
+                                mainAxisSpacing: 10,
                                 crossAxisSpacing: 18,
-                                mainAxisExtent: 250,
+                                mainAxisExtent: 244,
                               ),
                               itemBuilder: (context, index) {
                                 final product = state.products[index];
-                                return GestureDetector(
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => AboutProduct(productId: product.id)),
-                                  ),
-                                  child: ProductCard(
-                                    product: product,
-                                    onFavoriteToggle: () {},
-                                  ),
+                                return ProductCard(
+                                  product: product,
                                 );
                               },
                             ),
@@ -265,20 +253,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCategoryItem(String title) {
-    final isSelected = _selectedCategory == title;
+  Widget _buildCategoryItem(SectionEnum section, ThisBlocState state) {
     return Expanded(
       child: GestureDetector(
-        onTap: () => setState(() => _selectedCategory = title),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 2),
-          child: Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: isSelected ? const Color.fromRGBO(218, 151, 0, 1) : Colors.black,
-              fontSize: 15,
-              fontWeight: FontWeight.w500,
+        onTap: () => context.read<ProductBloc>().add(SaveSectionEvent(section: section)),
+        child: SizedBox(
+          height: 48,
+          child: Center(
+            child: Text(
+              section.name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: state.section.name == section.name ? const Color.fromRGBO(218, 151, 0, 1) : Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),

@@ -12,6 +12,10 @@ class ProductBloc extends Bloc<ProductEvent, ThisBlocState> {
     on<GetBannerEvent>((event, emit) => _getBanner(event, emit));
     on<LoadProducts>((event, emit) => _getProducts(event, emit));
     on<LoadProductById>((event, emit) => _getSingleProducts(event, emit));
+    on<SaveSectionEvent>((event, emit){
+      emit(state.copyWith(section: event.section));
+      add(LoadProducts(event.section.branch));
+    });
   }
 
   FutureOr<void> _getSingleProducts(LoadProductById event, Emitter<ThisBlocState> emit) async {
@@ -26,7 +30,7 @@ class ProductBloc extends Bloc<ProductEvent, ThisBlocState> {
 
   FutureOr<void> _getProducts(LoadProducts event, Emitter<ThisBlocState> emit) async {
     emit(state.copyWith(productStatus: FormzSubmissionStatus.inProgress));
-    final res = await repository.getProduct();
+    final res = await repository.getProduct(branch: event.branch);
     if (res.isNotEmpty) {
       emit(state.copyWith(productStatus: FormzSubmissionStatus.success, products: res));
     } else {

@@ -1,35 +1,30 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/app_constats/app_url.dart';
 import 'package:stroy_baza/app_constats/assets_model.dart';
 import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/models/product.dart';
-import 'package:stroy_baza/presentation/search/pages/about_product.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  final VoidCallback onFavoriteToggle;
 
   const ProductCard({
     super.key,
     required this.product,
-    required this.onFavoriteToggle,
   });
 
   //onTap: () => context.push(AppRouteName.aboutProduct),
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-      ),
+    return DecoratedBox(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
       child: Column(
         children: [
           GestureDetector(
-            onTap: () {
-              context.push(AppRouteName.aboutProduct);
-            },
+            onTap: () => context.go("${AppRouteName.main}/${AppRouteName.aboutProduct}", extra: product),
             child: Container(
               height: 170,
               width: double.infinity,
@@ -81,7 +76,7 @@ class ProductCard extends StatelessWidget {
                       Row(
                         children: [
                           GestureDetector(
-                            onTap: onFavoriteToggle,
+                            onTap: () => log("like"),
                             child: const Icon(
                               Icons.favorite_border,
                               color: Colors.grey,
