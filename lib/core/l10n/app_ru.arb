@@ -2,9 +2,8 @@
   "@@locale": "ru",
   "helloWorld": "Привет, мир",
   "changeLanguage": "Изменить язык",
-  "you": "Siz",
-  "city" : "shahridanmisiz ?",
-  "areUFromAnd" : " Вы из города ?",
+  "you": "Вы",
+  "city" : "из города ?",
   "detectProductAndDelivery":"Способ доставки и наличие товара зависят\n от выбранного региона",
   "yes":"Да",
   "nochange":"Нет, измените"

@@ -106,11 +106,12 @@ sealed class AppRouter {
                 ),
                 routes: [
                   GoRoute(
-                    parentNavigatorKey: _appNavigatorKey,
                     path: AppRouteName.aboutProduct,
                     pageBuilder: (context, state) {
+                      final productMap = state.extra as Map<String, dynamic>; // Map qilib oladi
+                      final product = Product.fromJson(productMap); // keyin Product obyektga o'giradi
                       return CustomTransitionPage(
-                        child: AboutProduct(product: state.extra as Product),
+                        child: AboutProduct(product: product),
                         transitionsBuilder: _fadeTransition,
                       );
                     },

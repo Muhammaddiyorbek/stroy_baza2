@@ -20,9 +20,8 @@ class ProductCarusel extends StatelessWidget {
         showIndicator: true,
         initialPage: 0,
         viewportFraction: 0.9,
-        enableInfiniteScroll: true,
-        autoPlay: true,
-        autoPlayInterval: const Duration(seconds: 3),
+        enableInfiniteScroll: false,
+        autoPlay: false,
       ),
       items: images
           .map((imageUrl) => Container(
@@ -57,13 +56,13 @@ class ProductCarusel extends StatelessWidget {
   }
 }
 
-/// Product selected
-class SelectableImage extends StatelessWidget {
+/// 1. Tanlanadigan ranglar
+class SelectableColor extends StatelessWidget {
   final String imagePath;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const SelectableImage({super.key, required this.imagePath, required this.isSelected, required this.onTap});
+  const SelectableColor({super.key, required this.imagePath, required this.isSelected, required this.onTap});
 
   @override
   Widget build(BuildContext context) {

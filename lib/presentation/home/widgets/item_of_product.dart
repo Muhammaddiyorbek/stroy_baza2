@@ -24,7 +24,7 @@ class ProductCard extends StatelessWidget {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => context.go("${AppRouteName.main}/${AppRouteName.aboutProduct}", extra: product),
+            onTap: () => context.go("${AppRouteName.main}/${AppRouteName.aboutProduct}", extra: product.toJson()),
             child: Container(
               height: 170,
               width: double.infinity,

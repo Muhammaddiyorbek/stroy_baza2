@@ -105,9 +105,9 @@ class _AboutProductState extends State<AboutProduct> {
                     child: Row(
                       children: List.generate(
                         product.variants.length,
-                            (index) => Padding(
+                        (index) => Padding(
                           padding: const EdgeInsets.only(right: 10),
-                          child: SelectableImage(
+                          child: SelectableColor(
                             imagePath: "https://back.stroybazan1.uz${product.variants[index].image}",
                             isSelected: index == selectedVariant,
                             onTap: () => setState(() => selectedVariant = index),
@@ -127,7 +127,7 @@ class _AboutProductState extends State<AboutProduct> {
                     child: Row(
                       children: List.generate(
                         product.variants.length,
-                            (index) => Padding(
+                        (index) => Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: SelectableSize(
                             text: product.variants[index].sizeUz,

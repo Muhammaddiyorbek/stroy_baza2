@@ -1,20 +1,15 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:formz/formz.dart';
-import 'package:go_router/go_router.dart';
-import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/core/utils/enums.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_event.dart';
 import 'package:stroy_baza/logic/bloc/product_state.dart';
 import 'package:stroy_baza/presentation/home/widgets/item_of_product.dart';
-import 'package:stroy_baza/presentation/search/pages/about_product.dart';
 import 'package:stroy_baza/presentation/home/widgets/item_of_crousel.dart';
+import 'package:stroy_baza/presentation/widgets/shimmer_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -176,8 +171,24 @@ class _HomePageState extends State<HomePage> {
                           /// Todo draw failure ui with stateless widget
                         },
                         if (state.productStatus.isInProgress) ...{
-                          /// Todo draw failure ui with stateless widget with shimmer
-                          const Center(child: CupertinoActivityIndicator(color: Colors.blue)),
+                          /// Shimmer widget qo‘shildi
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: GridView.builder(
+                              itemCount: state.products.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 10,
+                                crossAxisSpacing: 18,
+                                mainAxisExtent: 244,
+                              ),
+                              itemBuilder: (context, index) {
+                                return const ShimmerProductCard();
+                              },
+                            ),
+                          ),
                         },
 
                         if (state.productStatus.isSuccess) ...{

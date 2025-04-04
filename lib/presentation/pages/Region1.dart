@@ -15,7 +15,8 @@ class Region1 extends StatelessWidget {
     return Scaffold(
       body: BlocBuilder<CityBloc, CityState>(
         builder: (context, state) {
-          String selectedCityName = state.selectedCity?.nameUz.replaceAll(" shahar", "") ?? "Farg'ona";
+          String selectedCityName = state.selectedCity?.nameUz.replaceAll(" shahri", "").trim() ?? "Farg'ona";
+          String locale = Localizations.localeOf(context).languageCode;
 
           return Center(
             child: Column(
@@ -33,7 +34,7 @@ class Region1 extends StatelessWidget {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: "${context.localized.you} ",
+                        text: locale == "ru" ? "${context.localized.you} из города " : "${context.localized.you} ",
                         style: const TextStyle(fontSize: 18),
                       ),
                       TextSpan(
@@ -41,13 +42,14 @@ class Region1 extends StatelessWidget {
                         style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       TextSpan(
-                        text: "${context.localized.city} ",
+                        text: locale == "ru" ? " ?" : " ${context.localized.city} ",
                         style: const TextStyle(fontSize: 18),
                       ),
                     ],
                   ),
                   textAlign: TextAlign.center,
                 ),
+
                 const SizedBox(height: 12),
 
                 Text(
