@@ -1,0 +1,2 @@
+/Users/muhammaddiyor/Documents/Dasturlash/Flutter Dasturlar/flutter sherik/stroy_baza2/android/app/.cxx/Debug/3j5i3m1l/x86/CMakeFiles/edit_cache.dir
+/Users/muhammaddiyor/Documents/Dasturlash/Flutter Dasturlar/flutter sherik/stroy_baza2/android/app/.cxx/Debug/3j5i3m1l/x86/CMakeFiles/rebuild_cache.dir
