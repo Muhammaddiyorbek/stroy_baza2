@@ -1,12 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 import 'package:formz/formz.dart';
+import 'package:stroy_baza/core/extensions/context_extension.dart';
 import 'package:stroy_baza/core/utils/enums.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_event.dart';
 import 'package:stroy_baza/logic/bloc/product_state.dart';
+import 'package:stroy_baza/presentation/blocs/language_bloc/language_bloc.dart';
 import 'package:stroy_baza/presentation/home/widgets/item_of_product.dart';
 import 'package:stroy_baza/presentation/home/widgets/item_of_crousel.dart';
 import 'package:stroy_baza/presentation/widgets/shimmer_widget.dart';
@@ -94,6 +95,8 @@ class _HomePageState extends State<HomePage> {
                 child: RefreshIndicator(
                   onRefresh: () async {
                     context.read<ProductBloc>().add(LoadProducts(state.section.branch));
+
+                    /// bannerdiyam funksiyasini chaqir
                   },
                   child: SingleChildScrollView(
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -126,11 +129,29 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
 
+                        /// Banner
+
                         if (state.bannerStatus.isInProgress || state.bannerStatus.isInitial) ...{
-                          const Center(
-                              child: CupertinoActivityIndicator(
-                            color: Color.fromRGBO(220, 195, 139, 1),
-                          )),
+                          FlutterCarousel(
+                            options: FlutterCarouselOptions(
+                              height: 184.0,
+                              showIndicator: true,
+                              initialPage: 1,
+                              viewportFraction: 0.9,
+                              enableInfiniteScroll: false,
+                              floatingIndicator: false,
+                            ),
+                            items: [
+                              ...List.generate(
+                                state.banners.length,
+                                (i) {
+                                  final item = state.banners[i];
+                                  item.image;
+                                  return const ShimmerWidget(width: double.infinity, height: 183);
+                                },
+                              ),
+                            ],
+                          ),
                         },
                         if (state.bannerStatus.isSuccess) ...{
                           FlutterCarousel(
@@ -155,10 +176,10 @@ class _HomePageState extends State<HomePage> {
                           ),
                         },
 
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(left: 16),
                           child: Text(
-                            "Tavsiya etilgan maxsulotlar",
+                            context.localized.tafsiya,
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 15,
@@ -167,30 +188,14 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
 
+                        /// Products
+
                         if (state.productStatus.isFailure) ...{
                           /// Todo draw failure ui with stateless widget
                         },
                         if (state.productStatus.isInProgress) ...{
-                          /// Shimmer widget qo‘shildi
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: GridView.builder(
-                              itemCount: state.products.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 10,
-                                crossAxisSpacing: 18,
-                                mainAxisExtent: 244,
-                              ),
-                              itemBuilder: (context, index) {
-                                return const ShimmerProductCard();
-                              },
-                            ),
-                          ),
+                          ShimmerProductCard(productCount: state.products.length),
                         },
-
                         if (state.productStatus.isSuccess) ...{
                           if (state.products.isEmpty) ...{
                             const Center(

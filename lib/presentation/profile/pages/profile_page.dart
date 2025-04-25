@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/core/extensions/context_extension.dart';
+import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/presentation/profile/pages/aksiyalar_screen.dart';
 import 'package:stroy_baza/presentation/basked/pages/orders_screen.dart';
 import 'package:stroy_baza/presentation/profile/pages/phone_input.dart';
@@ -75,8 +78,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
             /// Shahar va Til Tanlash
             _buildCard([
-              _buildMenuItem("assets/profile_icons/select_city.svg", "Shahar tanlash"),
-              _buildMenuItem("assets/profile_icons/select_language.svg", "Til tanlash"),
+              _buildMenuItem("assets/profile_icons/select_city.svg", "Shahar tanlash", onTap: () {
+                context.push(AppRouteName.changeLocation);
+              }),
+              _buildMenuItem("assets/profile_icons/select_language.svg", context.localized.selectLanguage, onTap: () {
+                context.push("${AppRouteName.profile}/${AppRouteName.changeLanguage}");
+              }),
             ]),
 
             /// Qo‘llab-quvvatlash va Chiqish

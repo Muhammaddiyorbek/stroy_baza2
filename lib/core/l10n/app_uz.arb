@@ -8,5 +8,8 @@
   "city" : "shahridanmisiz ?",
   "detectProductAndDelivery":"Tanlangan hududga qarab yetkazib berish usuli\n va mahsulot mavjudligi belgilanadi",
   "yes": "Ha",
-  "nochange": "Yo'q, o'zgartirish"
+  "nochange": "Yo'q, o'zgartirish",
+  "search": "Qidirish",
+  "selectLanguage": "Til tanlash",
+  "tafsiya": "Tafsiya etilgan mahsulotlar uz"
 }

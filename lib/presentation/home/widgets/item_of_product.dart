@@ -32,22 +32,20 @@ class ProductCard extends StatelessWidget {
                 color: const Color.fromRGBO(242, 242, 241, 1),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Stack(
-                children: [
-                  Center(
-                    child: SizedBox(
-                      height: 114,
-                      width: 132,
-                      child: Image.network(
-                        "${AppUrl.base}${product.image}",
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(AssetsModel.penoplex);
-                        },
-                      ),
-                    ),
+
+              /// const ShimmerProductCard();
+              child: Center(
+                child: SizedBox(
+                  height: 114,
+                  width: 132,
+                  child: Image.network(
+                    "${AppUrl.base}${product.image}",
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(AssetsModel.penoplex);
+                    },
                   ),
-                ],
+                ),
               ),
             ),
           ),

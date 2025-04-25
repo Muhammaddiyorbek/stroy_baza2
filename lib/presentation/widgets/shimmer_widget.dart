@@ -31,48 +31,65 @@ class ShimmerWidget extends StatelessWidget {
 }
 
 class ShimmerProductCard extends StatelessWidget {
-  const ShimmerProductCard({super.key});
+  final int productCount;
+
+  const ShimmerProductCard({super.key, required this.productCount});
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 170,
-            width: double.infinity,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: GridView.builder(
+        itemCount: productCount,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 18,
+          mainAxisExtent: 244,
+        ),
+        itemBuilder: (context, index) {
+          return DecoratedBox(
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(242, 242, 241, 1),
               borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
             ),
-            child: Center(
-              child: ShimmerWidget(
-                width: 132,
-                height: 114,
-                shape: Border.all(width: 10),
-              ),
-            ),
-          ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: const [
-                SizedBox(height: 6),
-                ShimmerWidget(width: 80, height: 12), // Mahsulot nomi
-                SizedBox(height: 8),
-                ShimmerWidget(width: 100, height: 12), // Narx
+              children: [
+                Container(
+                  height: 170,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color.fromRGBO(242, 242, 241, 1),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: ShimmerWidget(
+                      width: 132,
+                      height: 114,
+                      shape: Border.all(width: 10),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 6),
+                      ShimmerWidget(width: 80, height: 12), // Mahsulot nomi
+                      SizedBox(height: 8),
+                      ShimmerWidget(width: 100, height: 12), // Narx
+                    ],
+                  ),
+                ),
               ],
             ),
-          )
-        ],
+          );
+        },
       ),
     );
   }

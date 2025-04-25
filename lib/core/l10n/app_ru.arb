@@ -6,5 +6,8 @@
   "city" : "из города ?",
   "detectProductAndDelivery":"Способ доставки и наличие товара зависят\n от выбранного региона",
   "yes":"Да",
-  "nochange":"Нет, измените"
+  "nochange":"Нет, измените",
+  "search":"Qidirish ru",
+  "selectLanguage": "Til tanlash ru",
+  "tafsiya": "Tafsiya etilgan mahsulotlar ru"
 }

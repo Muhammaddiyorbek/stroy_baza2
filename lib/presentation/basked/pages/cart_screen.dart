@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stroy_baza/app_constats/assets_model.dart';
-import 'package:stroy_baza/presentation/pages/Region1.dart';
+import 'package:stroy_baza/presentation/basked/widgets/payment.dart';
 import 'package:stroy_baza/presentation/profile/pages/payment_screen.dart';
 
 class CartScreen extends StatefulWidget {
@@ -13,127 +13,180 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   int quantity = 1;
   bool isInstallment = false;
+  String selectedText = 'Hoziroq';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFDEB887),
+        backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
         title: const Text(
           'Savatcha',
           style: TextStyle(color: Colors.black),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Hammasini tanlash',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Hammasini tanlash',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Icon(
+                          Icons.check_box_rounded,
+                          color: Color.fromRGBO(220, 195, 139, 1),
+                          size: 23,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    ListView.builder(
+                      itemCount: 5,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return _buildProductCard();
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                  ],
                 ),
-                Icon(Icons.check_circle, color: Colors.amber[700]),
-              ],
+              ),
             ),
-            const SizedBox(height: 16),
-            _buildProductCard(),
-            const Spacer(),
-            _buildPaymentSection(),
-          ],
-        ),
+          ),
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: _buildPaymentSection(),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildProductCard() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 100,
-            height: 100,
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(8),
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Image.asset(
+                AssetsModel.penoplex,
+                fit: BoxFit.contain,
+              ),
             ),
-            child: Image.asset(
-              AssetsModel.penoplex,
-              fit: BoxFit.contain,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'PENOPLEX COMFORT',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Row(
+                        children: [
+                          Text(
+                            'PENOPLEX COMFORT',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Icon(Icons.check_circle, color: Colors.amber[700]),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                const Text(
-                  '125.650 so\'m',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+                      const SizedBox(height: 4),
+                      const Text(
+                        "O'lcham: 4x6   Rang: Ko'k",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        '125.650 so\'m',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 35,
+                        width: 84,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildQuantityButton(
+                              icon: Icons.remove,
+                              onTap: () {
+                                if (quantity > 1) {
+                                  setState(() => quantity--);
+                                }
+                              },
+                            ),
+                            Container(
+                              width: 40,
+                              height: 32,
+                              alignment: Alignment.center,
+                              child: Text(
+                                quantity.toString(),
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ),
+                            _buildQuantityButton(
+                              icon: Icons.add,
+                              onTap: () => setState(() => quantity++),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    _buildQuantityButton(
-                      icon: Icons.remove,
-                      onTap: () {
-                        if (quantity > 1) {
-                          setState(() => quantity--);
-                        }
-                      },
-                    ),
-                    Container(
-                      width: 40,
-                      height: 32,
-                      alignment: Alignment.center,
-                      child: Text(
-                        quantity.toString(),
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    _buildQuantityButton(
-                      icon: Icons.add,
-                      onTap: () => setState(() => quantity++),
-                    ),
-                  ],
-                ),
-              ],
+                  const Icon(
+                    Icons.check_box_rounded,
+                    color: Color.fromRGBO(220, 195, 139, 1),
+                    size: 23,
+                  ),
+                ],
+              ),
             ),
+          ],
+        ),
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          child: Divider(
+            thickness: 1,
+            color: Color.fromRGBO(228, 228, 225, 1),
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
 
@@ -143,29 +196,21 @@ class _CartScreenState extends State<CartScreen> {
   }) {
     return InkWell(
       onTap: onTap,
-      child: Container(
-        width: 32,
-        height: 32,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Icon(icon, size: 20),
-      ),
+      child: Icon(icon, size: 14),
     );
   }
 
   Widget _buildPaymentSection() {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade200),
+        border: Border.all(color: const Color.fromRGBO(213, 213, 213, 1)),
       ),
       child: Column(
         children: [
-          // Add payment type toggle
+          // Toggle section
           Container(
             height: 40,
             decoration: BoxDecoration(
@@ -217,45 +262,67 @@ class _CartScreenState extends State<CartScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          isInstallment ? const SizedBox(height: 10) : const SizedBox.shrink(),
+
+          // Product count and total price
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('1 ta maxsulot'),
-              Text('185.000 so\'m', style: TextStyle(color: Colors.grey[600])),
+              Text(
+                isInstallment ? '1 ta maxsulot' : "",
+                style: TextStyle(color: Colors.black, fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              Text(isInstallment ? '185.000 so\'m' : "", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500)),
             ],
           ),
-          const SizedBox(height: 12),
-          const Text(
-            'Siz buyurtmani 3 oydan 24 oygacha muddatli to\'lov evaziga xarid qilishingiz mumkin.',
-            style: TextStyle(fontSize: 13),
+          isInstallment ? const SizedBox(height: 10) : const SizedBox.shrink(),
+
+          Text(
+            isInstallment ? 'Siz buyurtmani 3 oydan 24 oygacha muddatli to\'lov evaziga xarid qilishingiz mumkin.' : "",
+            style: const TextStyle(color: Color.fromRGBO(0, 0, 0, 0.75), fontSize: 12),
           ),
-          const SizedBox(height: 100),
+          isInstallment ? const SizedBox(height: 30) : const SizedBox.shrink(),
+
+          // TO'LOV TURIga mos TEXT QISMI
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                'Muddatli to\'lov',
-                style: TextStyle(
+              Text(
+                isInstallment ? 'Muddatli to\'lov' : 'Umumiy: ',
+                style: const TextStyle(
                   fontSize: 16,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
-              Text(
-                '11 886 so\'mmdan x 24',
-                style: TextStyle(color: Colors.grey[600]),
-              ),
+              Row(
+                children: [
+                  Text(
+                    isInstallment ? '11 886 so\'mdan' : '1 185.000 so\'m',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  if (isInstallment)
+                    Text(
+                      ' x 24',
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                ],
+              )
             ],
           ),
           const SizedBox(height: 16),
+
+          // Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const PaymentScreen()));
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFDEB887),
+                backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),

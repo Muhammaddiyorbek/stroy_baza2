@@ -23,6 +23,11 @@ abstract class StorageService {
 
   Future<void> deleteBool(String key);
 
+  /// Custom logic: onboarding flag
+  Future<bool> isFirstTime();
+
+  Future<void> setFirstTimeCompleted();
+
   /// Agar kerak bo'lsa, boshqa tiplar uchun metodlar (double, List<String>, va hokazo) ham qo'shilishi mumkin.
 }
 
@@ -85,5 +90,21 @@ class SharedPrefService implements StorageService {
   @override
   Future<void> deleteBool(String key) async {
     await _prefs.remove(key);
+  }
+
+  // ===== CUSTOM LOGIC: First Time Launch flag =====
+  static const String _isFirstTimeKey = 'is_first_time';
+
+  @override
+  Future<bool> isFirstTime() async {
+    final result = _prefs.getBool(_isFirstTimeKey);
+    return result ?? true;
+
+    /// birinchi marta kirgam bolsa true beradi
+  }
+
+  @override
+  Future<void> setFirstTimeCompleted() async {
+    await _prefs.setBool(_isFirstTimeKey, false);
   }
 }

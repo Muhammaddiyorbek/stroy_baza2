@@ -84,6 +84,9 @@ class Variant {
   String monthlyPayment12;
   String monthlyPayment24;
   int product;
+  String descriptionUz;
+  String descriptionRu;
+  String descriptionEn;
 
   Variant({
     required this.id,
@@ -101,6 +104,9 @@ class Variant {
     required this.monthlyPayment12,
     required this.monthlyPayment24,
     required this.product,
+    required this.descriptionUz,
+    required this.descriptionRu,
+    required this.descriptionEn,
   });
 
   factory Variant.fromJson(Map<String, dynamic> json) => Variant(
@@ -119,6 +125,9 @@ class Variant {
         monthlyPayment12: json["monthly_payment_12"] ?? '0',
         monthlyPayment24: json["monthly_payment_24"] ?? '0',
         product: json["product"] ?? 0,
+        descriptionUz: json["description_uz"] ?? '',
+        descriptionRu: json["description_ru"] ?? '',
+        descriptionEn: json["description_en"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -137,5 +146,8 @@ class Variant {
         "monthly_payment_12": monthlyPayment12,
         "monthly_payment_24": monthlyPayment24,
         "product": product,
+        "description_uz": descriptionUz,
+        "description_ru": descriptionRu,
+        "description_en": descriptionEn,
       };
 }

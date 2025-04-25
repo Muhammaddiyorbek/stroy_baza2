@@ -3,7 +3,6 @@ import "dart:convert";
 import "dart:developer";
 import "dart:io";
 import "package:dio/dio.dart";
-import "package:dio/io.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/services.dart";
 import "package:l/l.dart";
@@ -59,14 +58,14 @@ class ApiService {
   }
 
   static Future<String?> get(String api, Map<String, dynamic> params) async {
-    final fullUrl = "${ApiConst.baseUrl}$api";
-    log("Request URL: $fullUrl Request Params: $params");
+    //final fullUrl = "${ApiConst.baseUrl}$api";
+    //log("Request URL: $fullUrl Request Params: $params");
     try {
       final response = await (await initDio()).get<dynamic>(api, queryParameters: params);
-      log("response status code = ${response.statusCode}");
+      //log("response status code = ${response.statusCode}");
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        log("response data ketti api response == ${response.data}");
+        //log("response data ketti api response == ${response.data}");
         return jsonEncode(response.data);
       }
     } on DioException catch (e) {
@@ -79,15 +78,15 @@ class ApiService {
 
   static Future<dynamic> getData(String api, Map<String, dynamic> params) async {
     try {
-      final fullUrl = "${ApiConst.baseUrl}$api";
-      log("Request URL: $fullUrl");
-      log("Request Params: $params");
+      //final fullUrl = "${ApiConst.baseUrl}$api";
+      // log("Request URL: $fullUrl");
+      // log("Request Params: $params");
 
       final response = await (await initDio()).get<dynamic>(api, queryParameters: params);
 
       return jsonEncode(response.data);
     } on TimeoutException catch (_) {
-      log("The connection has timed out, Please try again!");
+      //log("The connection has timed out, Please try again!");
       rethrow;
     } on DioException catch (e) {
       log("Error: ${e.response.toString()}");
@@ -128,7 +127,7 @@ class ApiService {
       final response = await (await initDio()).post<dynamic>(api, data: data, queryParameters: params);
       return jsonEncode(response.data);
     } on TimeoutException catch (_) {
-      l.e("The connection has timed out, Please try again!");
+      //l.e("The connection has timed out, Please try again!");
       rethrow;
     } on DioException catch (e) {
       l.e(e.response.toString());
@@ -152,12 +151,12 @@ class ApiService {
         api,
         data: formData,
         onSendProgress: (int sentBytes, int totalBytes) {
-          final progressPercent = sentBytes / totalBytes * 100;
-          l.i("Progress: $progressPercent %");
+          //final progressPercent = sentBytes / totalBytes * 100;
+          //l.i("Progress: $progressPercent %");
         },
         onReceiveProgress: (int sentBytes, int totalBytes) {
-          final progressPercent = sentBytes / totalBytes * 100;
-          l.i("Progress: $progressPercent %");
+          // final progressPercent = sentBytes / totalBytes * 100;
+          // l.i("Progress: $progressPercent %");
         },
       ).timeout(
         const Duration(minutes: 10),

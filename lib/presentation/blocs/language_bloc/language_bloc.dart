@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:stroy_baza/core/services/local_storage_helper.dart';
 
 part 'language_event.dart';
 
@@ -16,11 +15,11 @@ enum LocaleCodeEnum { uz, ru, kk } //"uz", "ru", "kk"
 // String name = LocaleCode.uz.name;
 
 class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
-  static const String _spLocalKey = "app_local";
-
   LanguageBloc() : super(const LanguageState()) {
     on<FindCurrentLanguageEvent>(_onFindCurrentLanguageEvent);
     on<ChangeLocaleEvent>(_onChangeLocaleEvent);
+
+    log("languageeee: ${StorageRepository.getString(StorageKeys.language)}");
   }
 
   FutureOr<void> _onFindCurrentLanguageEvent(
@@ -29,10 +28,11 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
   ) async {
     emit(state.copyWith(languageStatus: FormzSubmissionStatus.inProgress));
 
-    final sp = await SharedPreferences.getInstance();
-    final savedLangCode = sp.getString(_spLocalKey);
+    final savedLangCode = await StorageRepository.getString(StorageKeys.language, defValue: '');
+    log("Saved langyuage in locale $savedLangCode");
 
-    if (savedLangCode != null && savedLangCode.isNotEmpty) {
+    if (savedLangCode.isNotEmpty) {
+      log("Saved langyuage in locale  is not empty");
       final newLocale = _getLocaleFromCode(savedLangCode);
       emit(
         state.copyWith(
@@ -42,6 +42,7 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
         ),
       );
     } else {
+      log("Saved langyuage in locale  is empty");
       // Agar saqlangan til bo'lmasa, default "uz"
       emit(
         state.copyWith(
@@ -60,11 +61,12 @@ class LanguageBloc extends Bloc<LanguageEvent, LanguageState> {
     emit(state.copyWith(languageStatus: FormzSubmissionStatus.inProgress));
 
     final newLocale = _getLocaleFromCode(event.langCode);
-    final sp = await SharedPreferences.getInstance();
 
     // Tilni xotiraga saqlaymiz
-    await sp.setString(_spLocalKey, event.langCode);
-    log("Locale saved to SharedPreferences: ${event.langCode}");
+    await StorageRepository.putString(StorageKeys.language, event.langCode);
+    final lang = StorageRepository.getString(StorageKeys.language, defValue: "xcnma");
+
+    log("saved language: $lang");
 
     // State ga emit qilamiz
     emit(

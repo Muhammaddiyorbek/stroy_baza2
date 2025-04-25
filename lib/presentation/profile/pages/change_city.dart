@@ -8,8 +8,8 @@ import 'package:stroy_baza/presentation/blocs/city/city_bloc.dart';
 import 'package:stroy_baza/presentation/blocs/city/city_event.dart';
 import 'package:stroy_baza/presentation/blocs/city/city_state.dart';
 
-class CitySelectionPage extends StatelessWidget {
-  const CitySelectionPage({super.key});
+class ChangeCity extends StatelessWidget {
+  const ChangeCity({super.key});
 
   @override
   Widget build(BuildContext context) {

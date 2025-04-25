@@ -18,7 +18,10 @@ class AboutProduct extends StatefulWidget {
 }
 
 class _AboutProductState extends State<AboutProduct> {
-  int selectedVariant = 0;
+  late Map<String, List<Variant>> groupedByColor;
+  late List<String> colors;
+  String selectedColor = "";
+  String? selectedSize;
   int selectedMonth = 3;
 
   @override
@@ -60,19 +63,28 @@ class _AboutProductState extends State<AboutProduct> {
           }
 
           final product = state.singleProduct;
-
           if (product.variants.isEmpty) {
             return const Center(
               child: Text('Mahsulot variantlari mavjud emas'),
             );
           }
 
-          final variant = product.variants[selectedVariant];
+          // Ranglar bo'yicha guruhlash
+          groupedByColor = {};
+          for (var v in product.variants) {
+            groupedByColor.putIfAbsent(v.colorUz, () => []).add(v);
+          }
+          colors = groupedByColor.keys.toList();
 
-          final images = [
-            "https://back.stroybazan1.uz${variant.image}",
-            ...product.variants.map((v) => "https://back.stroybazan1.uz${v.image}")
-          ];
+          // Default tanlov
+          selectedColor = selectedColor.isEmpty ? colors.first : selectedColor;
+          final currentVariants = groupedByColor[selectedColor]!;
+          final images = currentVariants.map((v) => "https://back.stroybazan1.uz${v.image}").toList();
+
+          final selectedVariant =
+              selectedSize == null ? currentVariants.first : currentVariants.firstWhere((v) => v.sizeUz == selectedSize);
+
+          final sizes = currentVariants.map((v) => v.sizeUz).toSet().toList();
 
           return SingleChildScrollView(
             child: Padding(
@@ -81,12 +93,12 @@ class _AboutProductState extends State<AboutProduct> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
-                  ProductCarusel(images: images),
+                  AboutProductCarusel(images: images),
                   const SizedBox(height: 18),
                   Text(
-                    variant.isAvailable ? "Mavjud" : "Mavjud emas",
+                    selectedVariant.isAvailable ? "Mavjud" : "Mavjud emas",
                     style: TextStyle(
-                      color: variant.isAvailable ? Colors.green : Colors.red,
+                      color: selectedVariant.isAvailable ? Colors.green : Colors.red,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -96,62 +108,70 @@ class _AboutProductState extends State<AboutProduct> {
                     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
                   ),
                   Text(
-                    "Rang: ${variant.colorUz}",
+                    "Rang: ${selectedVariant.colorUz}",
                     style: const TextStyle(fontSize: 13, color: Colors.black, fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(height: 6),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: List.generate(
-                        product.variants.length,
-                        (index) => Padding(
+                      children: colors.map((color) {
+                        final image = groupedByColor[color]!.first.image;
+                        return Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: SelectableColor(
-                            imagePath: "https://back.stroybazan1.uz${product.variants[index].image}",
-                            isSelected: index == selectedVariant,
-                            onTap: () => setState(() => selectedVariant = index),
+                            imagePath: "https://back.stroybazan1.uz$image",
+                            isSelected: selectedColor == color,
+                            onTap: () {
+                              setState(() {
+                                selectedColor = color;
+                                selectedSize = null;
+                              });
+                            },
                           ),
-                        ),
-                      ),
+                        );
+                      }).toList(),
                     ),
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    "O'lchami: ${variant.sizeUz}",
+                    "O'lchami: ${selectedVariant.sizeUz}",
                     style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(height: 7),
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: List.generate(
-                        product.variants.length,
-                        (index) => Padding(
+                      children: sizes.map((size) {
+                        return Padding(
                           padding: const EdgeInsets.only(right: 10),
                           child: SelectableSize(
-                            text: product.variants[index].sizeUz,
-                            isSelected: index == selectedVariant,
-                            onTap: () => setState(() => selectedVariant = index),
+                            text: size,
+                            isSelected: selectedSize == size,
+                            onTap: () {
+                              setState(() {
+                                selectedSize = size;
+                              });
+                            },
                           ),
-                        ),
-                      ),
+                        );
+                      }).toList(),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 20.0),
                     child: Text(
-                      "${variant.price} so'm",
+                      "${selectedVariant.price} so'm",
                       style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
                     ),
                   ),
                   InstallmentSelection(
                     selectedMonth: selectedMonth,
                     monthlyPayments: {
-                      3: variant.monthlyPayment3,
-                      6: variant.monthlyPayment6,
-                      12: variant.monthlyPayment12,
-                      24: variant.monthlyPayment24,
+                      3: selectedVariant.monthlyPayment3,
+                      6: selectedVariant.monthlyPayment6,
+                      12: selectedVariant.monthlyPayment12,
+                      24: selectedVariant.monthlyPayment24,
                     },
                     onSelect: (value) => setState(() => selectedMonth = value),
                   ),

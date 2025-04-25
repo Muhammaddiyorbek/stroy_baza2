@@ -12,20 +12,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Color(0xFFD4B37F),
+        backgroundColor: const Color(0xFFD4B37F),
         elevation: 0,
-        title: Text("Profile", style: TextStyle(color: Colors.black)),
+        title: const Text("Profile", style: TextStyle(color: Colors.black)),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.pop(context),
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             _buildProfileCard(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildSettingsCard([
               _buildListTile(
                 icon: Icons.account_balance,
@@ -49,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
             ]),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildSettingsCard([
               _buildListTile(
                 icon: Icons.location_on,
@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 },
               ),
             ]),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildSettingsCard([
               _buildListTile(
                 icon: Icons.info,
@@ -91,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onPressed: () {
           // Navigator.pushNamed(context, ErrorScreen.routeName);
         },
-        child: Icon(Icons.navigate_next),
+        child: const Icon(Icons.navigate_next),
       ),
     );
   }
@@ -102,9 +102,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey),
+        side: const BorderSide(color: Colors.grey),
       ),
-      child: Padding(
+      child: const Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
@@ -137,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.grey),
+        side: const BorderSide(color: Colors.grey),
       ),
       child: Column(children: children),
     );
@@ -152,12 +152,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           leading: Icon(icon, color: textColor),
           title: Text(title, style: TextStyle(color: textColor)),
-          trailing: Icon(Icons.chevron_right, color: Colors.grey),
+          trailing: const Icon(Icons.chevron_right, color: Colors.grey),
         ),
       ),
     );
@@ -168,10 +168,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          contentPadding: EdgeInsets.all(30),
-          actionsPadding: EdgeInsets.all(10),
+          contentPadding: const EdgeInsets.all(30),
+          actionsPadding: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          content: Text(
+          content: const Text(
             "Xaqiqatan ham accountdan chiqilsinmi?",
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
@@ -183,12 +183,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Navigator.pop(context);
                 // TODO: Chiqish logikasini qo‘shish
               },
-              child: Text("Ha", style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
+              child: const Text("Ha", style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold)),
             ),
-            SizedBox(width: 16),
+            const SizedBox(width: 16),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("Yo‘q", style: TextStyle(color: Colors.black, fontSize: 18)),
+              child: const Text("Yo‘q", style: TextStyle(color: Colors.black, fontSize: 18)),
             ),
           ],
         );

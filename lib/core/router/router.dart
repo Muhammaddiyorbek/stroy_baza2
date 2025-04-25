@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/core/services/local_storage_helper.dart';
 import 'package:stroy_baza/models/product.dart';
 import 'package:stroy_baza/presentation/pages/Region1.dart';
-import 'package:stroy_baza/presentation/search/pages/about_product.dart';
+import 'package:stroy_baza/presentation/pages/main_wrapper.dart';
+import 'package:stroy_baza/presentation/pages/splash.dart';
+import 'package:stroy_baza/presentation/profile/pages/change_city.dart';
+import 'package:stroy_baza/presentation/profile/pages/change_lang.dart';
+import 'package:stroy_baza/presentation/home/widgets/about_product.dart';
 import 'package:stroy_baza/presentation/profile/pages/profile_page.dart';
 import 'package:stroy_baza/presentation/search/pages/search_page.dart';
 import 'package:stroy_baza/presentation/basked/pages/cart_screen.dart';
-import 'package:stroy_baza/presentation/pages/home.dart';
 import 'package:stroy_baza/presentation/home/pages/home_page.dart';
 import 'package:stroy_baza/presentation/search/pages/home_product.dart';
 import 'package:stroy_baza/presentation/pages/init.dart';
@@ -20,6 +24,7 @@ final GlobalKey<NavigatorState> _shellNavigatorKey = GlobalKey<NavigatorState>(d
 class AppRouteName {
   const AppRouteName._();
 
+  static const String splash = "/splash";
   static const String init = "/init";
   static const String init2 = "/init2";
   static const String region1 = "/region1";
@@ -28,6 +33,8 @@ class AppRouteName {
   static const String signUp = "signUp";
   static const String homeProduct = "homeProduct";
   static const String aboutProduct = "aboutProduct";
+  static const String changeLanguage = "changeLanguage";
+  static const String changeLocation = "changeLocation";
 
   /// Bottom nav bar pages
   static const String main = "/main-screen";
@@ -40,10 +47,29 @@ class AppRouteName {
 sealed class AppRouter {
   AppRouter._();
 
+  final lang = StorageRepository.getString("app_local", defValue: '');
+  final location = StorageRepository.getString("location");
+
+  String path() {
+    if (lang.isEmpty && location.isEmpty) {
+      return AppRouteName.init;
+    } else {
+      return AppRouteName.init2;
+    }
+  }
+
   static GoRouter router = GoRouter(
     navigatorKey: _appNavigatorKey,
-    initialLocation: AppRouteName.init,
+    initialLocation: AppRouteName.splash,
     routes: [
+      // Splash
+      GoRoute(
+        path: AppRouteName.splash,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: Splash(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
       // Kirish
       GoRoute(
         path: AppRouteName.init,
@@ -67,6 +93,24 @@ sealed class AppRouter {
         path: AppRouteName.region2,
         pageBuilder: (context, state) => const CustomTransitionPage(
           child: CitySelectionPage(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // changeLanguage
+      GoRoute(
+        path: AppRouteName.changeLanguage,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: ChangeLang(),
+          transitionsBuilder: _fadeTransition,
+        ),
+      ),
+
+      // changeLocation
+      GoRoute(
+        path: AppRouteName.changeLocation,
+        pageBuilder: (context, state) => const CustomTransitionPage(
+          child: ChangeCity(),
           transitionsBuilder: _fadeTransition,
         ),
       ),
@@ -106,6 +150,7 @@ sealed class AppRouter {
                 ),
                 routes: [
                   GoRoute(
+                    parentNavigatorKey: _appNavigatorKey,
                     path: AppRouteName.aboutProduct,
                     pageBuilder: (context, state) {
                       final productMap = state.extra as Map<String, dynamic>; // Map qilib oladi
@@ -181,6 +226,18 @@ sealed class AppRouter {
                   transitionsBuilder: _fadeTransition,
                   transitionDuration: Duration(seconds: 2),
                 ),
+                routes: [
+                  GoRoute(
+                    parentNavigatorKey: _appNavigatorKey,
+                    path: AppRouteName.changeLanguage,
+                    pageBuilder: (context, state) {
+                      return const CustomTransitionPage(
+                        child: ChangeLang(),
+                        transitionsBuilder: _fadeTransition,
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

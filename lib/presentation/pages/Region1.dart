@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/core/extensions/context_extension.dart';
 import 'package:stroy_baza/core/router/router.dart';
+import 'package:stroy_baza/core/services/local_storage_helper.dart';
 import 'package:stroy_baza/presentation/blocs/city/city_bloc.dart';
 import 'package:stroy_baza/presentation/blocs/city/city_event.dart';
 import 'package:stroy_baza/presentation/blocs/city/city_state.dart';
@@ -80,6 +81,7 @@ class Region1 extends StatelessWidget {
                       const Color.fromRGBO(220, 195, 139, 1),
                       Colors.white,
                       onTap: () {
+                        StorageRepository.putString(StorageKeys.location, selectedCityName);
                         context.push(AppRouteName.init2);
                       },
                     ),

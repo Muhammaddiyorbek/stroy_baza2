@@ -4,7 +4,6 @@ import 'package:stroy_baza/core/utils/enums.dart';
 import 'package:stroy_baza/models/banner_model.dart';
 import 'package:stroy_baza/models/product.dart';
 
-
 class ThisBlocState extends Equatable {
   final List<Product> products;
   final List<BannerModel> banners;
@@ -14,8 +13,12 @@ class ThisBlocState extends Equatable {
   final FormzSubmissionStatus productStatus;
   final FormzSubmissionStatus singleProductStatus;
   final SectionEnum section;
+
+  final String selectedSize;
+  final String selectedColor;
+
   const ThisBlocState({
-    this.section =SectionEnum.base,
+    this.section = SectionEnum.base,
     this.bannerStatus = FormzSubmissionStatus.initial,
     this.singleProductStatus = FormzSubmissionStatus.initial,
     this.productStatus = FormzSubmissionStatus.initial,
@@ -36,6 +39,8 @@ class ThisBlocState extends Equatable {
       nameRu: '',
       nameUz: '',
     ),
+    this.selectedColor = '',
+    this.selectedSize = '',
   });
 
   ThisBlocState copyWith({
@@ -47,6 +52,8 @@ class ThisBlocState extends Equatable {
     FormzSubmissionStatus? bannerStatus,
     FormzSubmissionStatus? productStatus,
     FormzSubmissionStatus? singleProductStatus,
+    String? selectedColor,
+    String? selectedSize,
   }) =>
       ThisBlocState(
         section: section ?? this.section,
@@ -57,11 +64,13 @@ class ThisBlocState extends Equatable {
         products: products ?? this.products,
         errorMSg: errorMSg ?? this.errorMSg,
         singleProduct: singleProduct ?? this.singleProduct,
+        selectedColor: selectedColor ?? this.selectedColor,
+        selectedSize: selectedSize ?? this.selectedSize,
       );
 
   @override
   List<Object?> get props => [
-    section,
+        section,
         banners,
         products,
         singleProductStatus,
@@ -69,6 +78,7 @@ class ThisBlocState extends Equatable {
         singleProduct,
         bannerStatus,
         productStatus,
+        selectedColor,
+        selectedSize,
       ];
 }
-

@@ -8,5 +8,8 @@
    "city" : "шаҳриданмисиз ?",
    "detectProductAndDelivery":"Tанланган xудудга қараб етказиб бериш усули \nва маxсулот мавжудлиги белгиланади",
    "yes": "Xа",
-   "nochange": "Йўқ, ўзгартиринг"
+   "nochange": "Йўқ, ўзгартиринг",
+   "search": "Qidirish en",
+   "selectLanguage": "Til tanlash kril",
+   "tafsiya": "Tafsiya etilgan mahsulotlar krill"
 }
