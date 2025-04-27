@@ -2,16 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stroy_baza/logic/bloc_auth/auth_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/presentation/profile/pages/fullname_screen.dart';
 import 'package:stroy_baza/presentation/profile/pages/phone_input.dart';
-import 'package:telephony/telephony.dart';
-
-@pragma('vm:entry-point')
-void backgroundMessageHandler(SmsMessage message) {
-  print("\n=== Yangi SMS keldi bg ===");
-  print("SMS matni: ${message.body}");
-}
 
 class VerificationScreen extends StatefulWidget {
   final bool isLogin;
@@ -29,9 +21,8 @@ class VerificationScreen extends StatefulWidget {
 
 class _VerificationScreenState extends State<VerificationScreen> {
   final List<TextEditingController> controllers =
-  List.generate(6, (_) => TextEditingController());
+      List.generate(6, (_) => TextEditingController());
   final List<FocusNode> focusNodes = List.generate(6, (_) => FocusNode());
-  final Telephony telephony = Telephony.instance;
   Timer? _timer;
   int _timeLeft = 59;
   bool isLoading = false;
@@ -40,7 +31,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
   void initState() {
     super.initState();
     startTimer();
-    _initSmsListener();
     _setupControllers();
   }
 
@@ -58,40 +48,6 @@ class _VerificationScreenState extends State<VerificationScreen> {
         _verifyCode();
       }
     });
-  }
-
-  Future<void> _initSmsListener() async {
-    final bool? permissionsGranted =
-    await telephony.requestPhoneAndSmsPermissions;
-
-    if (permissionsGranted ?? false) {
-      telephony.listenIncomingSms(
-        onNewMessage: _handleIncomingSms,
-        onBackgroundMessage: backgroundMessageHandler,
-      );
-      print("SMS listener faollashtirildi");
-    } else {
-      print("SMS ruxsati berilmadi");
-    }
-  }
-
-  void _handleIncomingSms(SmsMessage message) {
-    print("\n=== Yangi SMS keldi ===");
-    print("SMS matni: ${message.body}");
-
-    if (message.body?.contains("tasdiqlash kodingiz") ?? false) {
-      final match = RegExp(r'tasdiqlash kodingiz[^\d]*(\d{6})')
-          .firstMatch(message.body ?? '');
-      if (match != null) {
-        final code = match.group(1)!;
-        setState(() {
-          for (int i = 0; i < 6; i++) {
-            controllers[i].text = code[i];
-          }
-        });
-        _verifyCode();
-      }
-    }
   }
 
   void startTimer() {
@@ -113,11 +69,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
       });
       startTimer();
       context.read<AuthBloc>().add(
-        SendPhoneEvent(
-          phoneNumber: widget.phoneNumber,
-          isLogin: widget.isLogin,
-        ),
-      );
+            SendPhoneEvent(
+              phoneNumber: widget.phoneNumber,
+              isLogin: widget.isLogin,
+            ),
+          );
     }
   }
 
@@ -130,12 +86,12 @@ class _VerificationScreenState extends State<VerificationScreen> {
     });
 
     context.read<AuthBloc>().add(
-      VerifyPhoneEvent(
-        phoneNumber: widget.phoneNumber,
-        code: code,
-        isLogin: widget.isLogin,
-      ),
-    );
+          VerifyPhoneEvent(
+            phoneNumber: widget.phoneNumber,
+            code: code,
+            isLogin: widget.isLogin,
+          ),
+        );
   }
 
   @override
@@ -294,30 +250,33 @@ class _VerificationScreenState extends State<VerificationScreen> {
                         : (isLoading ? null : _verifyCode),
                     child: isLoading
                         ? const SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2,
-                      ),
-                    )
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2,
+                            ),
+                          )
                         : Text(
-                      _timeLeft == 0
-                          ? 'Qayta yuborish'
-                          : (widget.isLogin
-                          ? 'Tasdiqlash'
-                          : 'Ro\'yxatdan o\'tishni yakunlash'),
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                            _timeLeft == 0
+                                ? 'Qayta yuborish'
+                                : (widget.isLogin
+                                    ? 'Tasdiqlash'
+                                    : 'Ro\'yxatdan o\'tishni yakunlash'),
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 30),
                 TextButton(
-                  onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>PhoneInputScreen())),
+                  onPressed: () => Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PhoneInputScreen())),
                   child: const Text(
                     "Telefon raqamni o'zgartirish",
                     style: TextStyle(
