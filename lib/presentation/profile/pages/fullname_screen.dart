@@ -152,7 +152,7 @@ class _FullNameScreenState extends State<FullNameScreen> {
                         ),
                       )
                           : Text(
-                        widget.isEdit ? 'Saqlash' : 'Davom etish',
+                        widget.isEdit ? "O'zgarishlarni saqlash" : 'Davom etish',
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.black,

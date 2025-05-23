@@ -27,7 +27,20 @@ class _AboutProductState extends State<AboutProduct> {
   @override
   void initState() {
     super.initState();
+    _loadProduct();
+  }
+
+  void _loadProduct() {
     context.read<ProductBloc>().add(LoadProductById(widget.product.id));
+  }
+
+  Future<void> _onRefresh() async {
+    setState(() {
+      selectedColor = "";
+      selectedSize = null;
+      selectedMonth = 3;
+    });
+    _loadProduct();
   }
 
   @override
@@ -57,15 +70,33 @@ class _AboutProductState extends State<AboutProduct> {
           }
 
           if (state.singleProductStatus.isFailure) {
-            return const Center(
-              child: Text("Mahsulot yuklanishda xatolik yuz berdi"),
+            return RefreshIndicator(
+              onRefresh: _onRefresh,
+              child: const SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 300),
+                    child: Text("Mahsulot yuklanishda xatolik yuz berdi"),
+                  ),
+                ),
+              ),
             );
           }
 
           final product = state.singleProduct;
           if (product.variants.isEmpty) {
-            return const Center(
-              child: Text('Mahsulot variantlari mavjud emas'),
+            return RefreshIndicator(
+              onRefresh: _onRefresh,
+              child: const SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 300),
+                    child: Text('Mahsulot variantlari mavjud emas'),
+                  ),
+                ),
+              ),
             );
           }
 
@@ -77,111 +108,137 @@ class _AboutProductState extends State<AboutProduct> {
           colors = groupedByColor.keys.toList();
 
           // Default tanlov
-          selectedColor = selectedColor.isEmpty ? colors.first : selectedColor;
-          final currentVariants = groupedByColor[selectedColor]!;
-          final images = currentVariants.map((v) => "https://back.stroybazan1.uz${v.image}").toList();
+          if (selectedColor.isEmpty || !colors.contains(selectedColor)) {
+            selectedColor = colors.first;
+            selectedSize = null;
+          }
 
-          final selectedVariant =
-              selectedSize == null ? currentVariants.first : currentVariants.firstWhere((v) => v.sizeUz == selectedSize);
+          List<Variant> currentVariants = groupedByColor[selectedColor] ?? [];
 
-          final sizes = currentVariants.map((v) => v.sizeUz).toSet().toList();
+          if (currentVariants.isNotEmpty) {
+            final images = currentVariants.map((v) => "https://back.stroybazan1.uz${v.image}").toList();
+            final selectedVariant = selectedSize == null
+                ? currentVariants.first
+                : currentVariants.firstWhere(
+                  (v) => v.sizeUz == selectedSize,
+              orElse: () => currentVariants.first,
+            );
+            final sizes = currentVariants.map((v) => v.sizeUz).toSet().toList();
 
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  AboutProductCarusel(images: images),
-                  const SizedBox(height: 18),
-                  Text(
-                    selectedVariant.isAvailable ? "Mavjud" : "Mavjud emas",
-                    style: TextStyle(
-                      color: selectedVariant.isAvailable ? Colors.green : Colors.red,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+            return RefreshIndicator(
+              onRefresh: _onRefresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 22.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      AboutProductCarusel(images: images),
+                      const SizedBox(height: 18),
+                      Text(
+                        selectedVariant.isAvailable ? "Mavjud" : "Mavjud emas",
+                        style: TextStyle(
+                          color: selectedVariant.isAvailable ? Colors.green : Colors.red,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        product.nameUz,
+                        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        "Rang: ${selectedVariant.colorUz}",
+                        style: const TextStyle(fontSize: 13, color: Colors.black, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 6),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: colors.map((color) {
+                            final image = groupedByColor[color]!.first.image;
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: SelectableColor(
+                                imagePath: "https://back.stroybazan1.uz$image",
+                                isSelected: selectedColor == color,
+                                onTap: () {
+                                  setState(() {
+                                    selectedColor = color;
+                                    selectedSize = null;
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        "O'lchami: ${selectedVariant.sizeUz}",
+                        style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 7),
+                      SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: sizes.map((size) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: SelectableSize(
+                                text: size,
+                                isSelected: selectedSize == size,
+                                onTap: () {
+                                  setState(() {
+                                    selectedSize = size;
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        child: Text(
+                          "${selectedVariant.price} so'm",
+                          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      InstallmentSelection(
+                        selectedMonth: selectedMonth,
+                        monthlyPayments: {
+                          3: selectedVariant.monthlyPayment3,
+                          6: selectedVariant.monthlyPayment6,
+                          12: selectedVariant.monthlyPayment12,
+                          24: selectedVariant.monthlyPayment24,
+                        },
+                        onSelect: (value) => setState(() => selectedMonth = value),
+                      ),
+                      const SizedBox(height: 10),
+                      const DeliveryInfoCard(),
+                      const SizedBox(height: 20),
+                    ],
                   ),
-                  Text(
-                    product.nameUz,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    "Rang: ${selectedVariant.colorUz}",
-                    style: const TextStyle(fontSize: 13, color: Colors.black, fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(height: 6),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: colors.map((color) {
-                        final image = groupedByColor[color]!.first.image;
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: SelectableColor(
-                            imagePath: "https://back.stroybazan1.uz$image",
-                            isSelected: selectedColor == color,
-                            onTap: () {
-                              setState(() {
-                                selectedColor = color;
-                                selectedSize = null;
-                              });
-                            },
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    "O'lchami: ${selectedVariant.sizeUz}",
-                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(height: 7),
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: sizes.map((size) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: SelectableSize(
-                            text: size,
-                            isSelected: selectedSize == size,
-                            onTap: () {
-                              setState(() {
-                                selectedSize = size;
-                              });
-                            },
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20.0),
-                    child: Text(
-                      "${selectedVariant.price} so'm",
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  InstallmentSelection(
-                    selectedMonth: selectedMonth,
-                    monthlyPayments: {
-                      3: selectedVariant.monthlyPayment3,
-                      6: selectedVariant.monthlyPayment6,
-                      12: selectedVariant.monthlyPayment12,
-                      24: selectedVariant.monthlyPayment24,
-                    },
-                    onSelect: (value) => setState(() => selectedMonth = value),
-                  ),
-                  const SizedBox(height: 10),
-                  const DeliveryInfoCard(),
-                  const SizedBox(height: 20),
-                ],
+                ),
               ),
-            ),
-          );
+            );
+          } else {
+            return RefreshIndicator(
+              onRefresh: _onRefresh,
+              child: const SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 300),
+                    child: Text("No data available, please refresh the page"),
+                  ),
+                ),
+              ),
+            );
+          }
         },
       ),
     );

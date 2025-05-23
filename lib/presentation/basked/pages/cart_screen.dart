@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stroy_baza/app_constats/assets_model.dart';
-import 'package:stroy_baza/presentation/basked/widgets/payment.dart';
-import 'package:stroy_baza/presentation/profile/pages/payment_screen.dart';
+import 'package:stroy_baza/presentation/basked/pages/payment_screen.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -14,6 +13,8 @@ class _CartScreenState extends State<CartScreen> {
   int quantity = 1;
   bool isInstallment = false;
   String selectedText = 'Hoziroq';
+  List<bool> selectedProducts = List.generate(5, (_) => false);
+  bool isAllSelected = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +36,43 @@ class _CartScreenState extends State<CartScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
+                        const Text(
                           'Hammasini tanlash',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Icon(
-                          Icons.check_box_rounded,
-                          color: Color.fromRGBO(220, 195, 139, 1),
-                          size: 23,
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isAllSelected = !isAllSelected;
+                              for (int i = 0; i < selectedProducts.length; i++) {
+                                selectedProducts[i] = isAllSelected;
+                              }
+                            });
+                          },
+                          child: isAllSelected
+                              ? Icon(
+                            Icons.check_box_rounded,
+                            color: Color.fromRGBO(220, 195, 139, 1),
+                            size: 23,
+                          )
+                              : Container(
+                            width: 23,
+                            height: 23,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Color.fromRGBO(220, 195, 139, 1),
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -58,7 +82,7 @@ class _CartScreenState extends State<CartScreen> {
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return _buildProductCard();
+                        return _buildProductCard(index);
                       },
                     ),
                     const SizedBox(height: 16),
@@ -77,7 +101,7 @@ class _CartScreenState extends State<CartScreen> {
     );
   }
 
-  Widget _buildProductCard() {
+  Widget _buildProductCard(int index) {
     return Column(
       children: [
         Row(
@@ -169,10 +193,31 @@ class _CartScreenState extends State<CartScreen> {
                       ),
                     ],
                   ),
-                  const Icon(
-                    Icons.check_box_rounded,
-                    color: Color.fromRGBO(220, 195, 139, 1),
-                    size: 23,
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedProducts[index] = !selectedProducts[index];
+                        isAllSelected = selectedProducts.every((e) => e);
+                      });
+                    },
+                    child: selectedProducts[index]
+                        ? const Icon(
+                      Icons.check_box_rounded,
+                      color: Color.fromRGBO(220, 195, 139, 1),
+                      size: 23,
+                    )
+                        : Container(
+                      width: 23,
+                      height: 23,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Color.fromRGBO(220, 195, 139, 1),
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                    ),
                   ),
                 ],
               ),

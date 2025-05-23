@@ -62,7 +62,11 @@ class _SearchPageState extends State<SearchPage> {
                         style: const TextStyle(fontSize: 20, color: Color.fromRGBO(0, 0, 0, 0.55)),
                       ),
                       trailing: const Icon(Icons.chevron_right, color: Color.fromRGBO(0, 0, 0, 0.55), size: 24),
-                      onTap: () => context.push("${AppRouteName.search}/${AppRouteName.homeProduct}"),
+                      onTap: () => context.push(
+                        "${AppRouteName.search}/${AppRouteName.homeProduct}",
+                        extra: state.filteredCategories[index], // category nomini uzatyapmiz
+                      ),
+
                     ),
                   );
                 },

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/core/services/local_storage_helper.dart';
 import 'package:stroy_baza/models/product.dart';
+import 'package:stroy_baza/presentation/basked/pages/delivery_address_screen.dart';
+import 'package:stroy_baza/presentation/basked/pages/user_agreement_screen.dart';
 import 'package:stroy_baza/presentation/pages/Region1.dart';
 import 'package:stroy_baza/presentation/pages/main_wrapper.dart';
 import 'package:stroy_baza/presentation/pages/splash.dart';
@@ -35,6 +37,8 @@ class AppRouteName {
   static const String aboutProduct = "aboutProduct";
   static const String changeLanguage = "changeLanguage";
   static const String changeLocation = "changeLocation";
+  static const String userAgreement = "userAgreement";
+  static const String deliveryAddressScreen = "deliveryAddressScreen";
 
   /// Bottom nav bar pages
   static const String main = "/main-screen";
@@ -115,7 +119,18 @@ sealed class AppRouter {
         ),
       ),
 
-      // Kirish2
+      // deliveryAddressScreen
+      GoRoute(
+      name: 'deliveryAddressScreen',
+  path: '/deliveryAddressScreen',
+  pageBuilder: (context, state) => const CustomTransitionPage(
+  child: DeliveryAddressScreen(),
+  transitionsBuilder: _fadeTransition,
+  ),
+  ),
+
+
+  // Kirish2
       GoRoute(
         path: AppRouteName.init2,
         pageBuilder: (context, state) => const CustomTransitionPage(
@@ -140,6 +155,7 @@ sealed class AppRouter {
         branches: [
           StatefulShellBranch(
             navigatorKey: _shellNavigatorKey,
+
             routes: [
               GoRoute(
                 path: AppRouteName.main,
@@ -164,8 +180,10 @@ sealed class AppRouter {
                 ],
               ),
             ],
+
           ),
-          // Search branch
+
+          /// Search branch
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -180,30 +198,33 @@ sealed class AppRouter {
                       parentNavigatorKey: _appNavigatorKey,
                       path: AppRouteName.homeProduct,
                       pageBuilder: (context, state) {
-                        //final id = state.pathParameters['id'] ?? '';
-                        return const CustomTransitionPage(
-                          child: HomeProduct(),
+                        final categoryName = state.extra as String? ?? ''; // extra dan olamiz
+                        return CustomTransitionPage(
+                          child: HomeProduct(categoryName: categoryName),
                           transitionsBuilder: _fadeTransition,
                         );
                       },
                     ),
+
                   ]),
             ],
           ),
-          // Box branch
+
+          /// Box branch
           StatefulShellBranch(
             routes: [
               GoRoute(
                 path: AppRouteName.box,
                 pageBuilder: (context, state) => const CustomTransitionPage(
-                  child: Scaffold(body: Center(child: Text("Box"))),
+                  child: Scaffold(backgroundColor: Colors.white, body: Center(child: Text("Box"))),
                   transitionsBuilder: _fadeTransition,
                   transitionDuration: Duration(seconds: 2),
                 ),
               ),
             ],
           ),
-          // Basket branch
+
+          /// Basket branch
           StatefulShellBranch(
             routes: [
               GoRoute(
@@ -216,7 +237,8 @@ sealed class AppRouter {
               ),
             ],
           ),
-          // Profile branch
+
+          /// Profile branch
           StatefulShellBranch(
             routes: [
               GoRoute(

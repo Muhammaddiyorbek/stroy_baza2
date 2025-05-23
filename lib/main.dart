@@ -1,10 +1,15 @@
 import 'package:device_preview/device_preview.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/core/services/local_storage_helper.dart';
+import 'package:stroy_baza/logic/bloc_auth/auth_bloc.dart';
+import 'package:stroy_baza/logic/repository/auth_repository.dart';
 import 'package:stroy_baza/logic/repository/city_responsitory.dart';
+import 'package:stroy_baza/logic/repository/user_agreement_repository.dart';
+import 'package:stroy_baza/presentation/basked/bolcs/user_agreement/user_agreement_bloc.dart';
 import 'package:stroy_baza/presentation/blocs/city/city_bloc.dart';
 import 'package:stroy_baza/presentation/blocs/language_bloc/language_bloc.dart';
 import 'package:stroy_baza/logic/bloc/product_bloc.dart';
@@ -35,6 +40,8 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ProductBloc(ProductRepositoryImpl())),
         BlocProvider(create: (context) => HomeBloc()),
         BlocProvider(create: (context) => CityBloc(CityRepository())),
+        BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => UserAgreementBloc(UserAgreementRepository(Dio()))),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(
         builder: (context, languageState) {

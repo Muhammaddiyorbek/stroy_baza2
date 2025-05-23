@@ -1,27 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:stroy_baza/logic/bloc/product_bloc.dart';
-import 'package:stroy_baza/logic/bloc/product_event.dart';
-import 'package:stroy_baza/logic/bloc/product_state.dart';
 
-class HomeProduct extends StatefulWidget {
-  const HomeProduct({super.key});
+class HomeProduct extends StatelessWidget {
+  final String categoryName; // category nomi
 
-  @override
-  State<HomeProduct> createState() => _HomeProductState();
-}
-
-class _HomeProductState extends State<HomeProduct> {
-  late final ThisBlocState state;
-  
-  
-  @override
-  void initState() {
-    state = context.read<ProductBloc>().state;
-    context.read<ProductBloc>().add(LoadProducts(state.section.branch));
-    super.initState();
-  }
+  const HomeProduct({super.key, required this.categoryName});
 
   @override
   Widget build(BuildContext context) {
@@ -29,55 +11,21 @@ class _HomeProductState extends State<HomeProduct> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
-        elevation: 0,
         leading: IconButton(
-          onPressed: () => context.pop(),
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
-          ),
+          icon: const Icon(Icons.chevron_left, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Maxsulot haqida',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
+        titleSpacing: -15,
+        title: Text(
+          categoryName, // Bu yerda category nomini ko'rsatamiz
+          style: const TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-            child: Container(
-              color: Colors.red,
-              height: 50,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-            child: Container(
-              color: Colors.red,
-              height: 50,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-            child: Container(
-              color: Colors.red,
-              height: 50,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
-            child: Container(
-              color: Colors.red,
-              height: 50,
-            ),
-          ),
-        ],
-      ),
+      body: const Center(child: Text("Mahsulotlar...")),
+    );
+  }
+}
+
       // body: BlocBuilder<ProductBloc, ThisBlocState>(
       //   builder: (context, state) {
       //     return Column(
@@ -123,6 +71,4 @@ class _HomeProductState extends State<HomeProduct> {
       //     );
       //   },
       // ),
-    );
-  }
-}
+

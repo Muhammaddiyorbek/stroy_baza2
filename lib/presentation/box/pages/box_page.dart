@@ -10,8 +10,8 @@ class BoxPage extends StatefulWidget {
 class _BoxPageState extends State<BoxPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.yellow,
+    return const Scaffold(
+      backgroundColor: Colors.white,
       body: Center(
       ),
     );

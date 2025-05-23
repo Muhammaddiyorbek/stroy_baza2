@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stroy_baza/core/extensions/context_extension.dart';
+import 'package:stroy_baza/core/router/router.dart';
 import 'package:stroy_baza/logic/repository/auth_repository.dart';
 import 'package:stroy_baza/presentation/profile/pages/fullname_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -133,15 +136,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               builder: (context) => FavoritesScreen()))),
                 ]),
 
+                /// Shahar va Til Tanlash
                 _buildCard([
-                  _buildMenuItem(
-                    "assets/profile_icons/select_city.svg",
-                    "Shahar tanlash",
-                  ),
-                  _buildMenuItem(
-                    "assets/profile_icons/select_language.svg",
-                    "Til tanlash",
-                  ),
+                  _buildMenuItem("assets/profile_icons/select_city.svg", "Shahar tanlash", onTap: () {
+                    context.push(AppRouteName.changeLocation);
+                  }),
+                  _buildMenuItem("assets/profile_icons/select_language.svg", context.localized.selectLanguage, onTap: () {
+                    context.push("${AppRouteName.profile}/${AppRouteName.changeLanguage}");
+                  }),
                 ]),
 
                 _buildCard([

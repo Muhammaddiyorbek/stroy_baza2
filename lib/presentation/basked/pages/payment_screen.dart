@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stroy_baza/app_constats/assets_model.dart';
+import 'package:stroy_baza/core/router/router.dart';
+import 'package:stroy_baza/presentation/basked/pages/delivery_address_screen.dart';
+import 'package:stroy_baza/presentation/basked/pages/user_agreement_screen.dart';
+import 'package:stroy_baza/presentation/blocs/language_bloc/language_bloc.dart';
 import 'package:stroy_baza/presentation/profile/widgets/payment_options_bottom_sheet.dart';
 
 class PaymentScreen extends StatefulWidget {
@@ -16,12 +22,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xFFDEB887),
-        leading: const BackButton(color: Colors.black),
-        title: const Text('Buyurtma', style: TextStyle(color: Colors.black)),
         elevation: 0,
+        surfaceTintColor: const Color.fromRGBO(220, 195, 139, 1),
+        backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
+        leading: IconButton(
+          icon: const Icon(Icons.chevron_left, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        titleSpacing: -15,
+        title: const Text(
+          "Buyurtma",
+          style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
+        ),
       ),
       body: SingleChildScrollView(
+
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -70,11 +85,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(12),
-      child: Row(
+      child: const Row(
         children: [
           Icon(Icons.person, color: Colors.grey, size: 35),
-          const SizedBox(width: 12),
-          const Column(
+          SizedBox(width: 12),
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -100,33 +115,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
         children: [
           Image.asset(AssetsModel.penoplex, height: 80),
           const SizedBox(width: 12),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'PENOPLEX COMFORT',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       '1.200.000 so\'m',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text('1 dona'),
-                    ),
+                    Text('1 dona'),
                   ],
                 ),
               ],
@@ -182,7 +187,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
         leading: Icon(Icons.location_on, color: Colors.amber.shade700),
         title: const Text('Yetkazib berish manzilini tanlang'),
         trailing: const Icon(Icons.chevron_right),
-        onTap: () {},
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => DeliveryAddressScreen(),));
+        },
       ),
     );
   }
@@ -219,16 +226,25 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         children: [
           _buildPaymentMethod(0, 'Click', AssetsModel.click),
-          const Divider(height: 1),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(height: 1),
+          ),
           _buildPaymentMethod(1, 'Pay me', AssetsModel.payme),
-          const Divider(height: 1),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(height: 1),
+          ),
           _buildPaymentMethod(2, 'Qabul qilinganda', AssetsModel.qabul_qilganda),
-          const Divider(height: 1),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(height: 1),
+          ),
           _buildPaymentMethod(3, 'Muddatli to\'lov', AssetsModel.mudatli_tolov),
         ],
       ),
@@ -303,11 +319,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title),
+          Text(title, style: const TextStyle(fontWeight: FontWeight.w700),),
           Text(
             value,
             style: TextStyle(
-              fontWeight: isBold ? FontWeight.bold : FontWeight.normal,
+              fontWeight: isBold ? FontWeight.bold : FontWeight.w700,
             ),
           ),
         ],
@@ -318,18 +334,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Widget _buildCheckoutButton() {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
-        onPressed: _showPaymentOptions,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFDEB887),
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 22),
+        child: ElevatedButton(
+          onPressed: _showPaymentOptions,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFDEB887),
+            padding: const EdgeInsets.symmetric( vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
           ),
-        ),
-        child: const Text(
-          'Xaridni rasmiylashtirish',
-          style: TextStyle(color: Colors.black),
+          child: const Text(
+            'Xaridni rasmiylashtirish',
+            style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.w600),
+          ),
         ),
       ),
     );
@@ -339,23 +358,42 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: Center(
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: TextSpan(
-            style: const TextStyle(color: Colors.black87, fontSize: 12),
-            children: [
-              const TextSpan(text: 'Buyurtmani tasdiqlash orqali men '),
-              TextSpan(
-                text: 'foydalanuvchi shartnomasini',
-                style: TextStyle(color: Colors.purple.shade700),
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          children: [
+            const Text(
+              'Buyurtmani tasdiqlash orqali men ',
+              style: TextStyle(color: Colors.black, fontSize: 12),
+            ),
+            GestureDetector(
+              onTap: () {
+                final currentLocale = context.read<LanguageBloc>().state.locale.languageCode;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => UserAgreementScreen(locale: currentLocale),
+                  ),
+                );
+              },
+              child: const Text(
+                'foydalanuvchi shartnomasini',
+                style: TextStyle(
+                  color: Colors.purple,
+                  fontSize: 12,
+                  decoration: TextDecoration.underline,
+                ),
               ),
-              const TextSpan(text: ' shartlarini qabul qilaman.'),
-            ],
-          ),
+            ),
+            const Text(
+              ' shartlarini qabul qilaman.',
+              style: TextStyle(color: Colors.black, fontSize: 12),
+            ),
+          ],
         ),
       ),
     );
   }
+
 
   void _showPaymentOptions() {
     showModalBottomSheet(
