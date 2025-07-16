@@ -12,7 +12,7 @@ import "package:stroy_baza/core/services/network_service/api_const.dart";
 class ApiService {
   const ApiService._();
 
-  static Future<Dio> initDio() async {
+  static Future<Dio> initDio({Map<String, dynamic> header = const {}}) async {
     log("init dio ");
     final dio = Dio(
       BaseOptions(
@@ -20,6 +20,7 @@ class ApiService {
         connectTimeout: ApiConst.connectionTimeout,
         receiveTimeout: ApiConst.sendTimeout,
         sendTimeout: ApiConst.sendTimeout,
+        headers: header,
         validateStatus: (status) => status != null && status < 205,
       ),
     );
@@ -121,10 +122,14 @@ class ApiService {
 //   }
 // }
 
-  static Future<String?> post(String api, Map<String, dynamic> data,
-      [Map<String, dynamic> params = const <String, dynamic>{}]) async {
+  static Future<String?> post(
+    String api,
+    Map<String, dynamic> data, {
+    Map<String, dynamic> params = const <String, dynamic>{},
+    Map<String, dynamic> header = const <String, dynamic>{},
+  }) async {
     try {
-      final response = await (await initDio()).post<dynamic>(api, data: data, queryParameters: params);
+      final response = await (await initDio(header: header)).post<dynamic>(api, data: data, queryParameters: params);
       return jsonEncode(response.data);
     } on TimeoutException catch (_) {
       //l.e("The connection has timed out, Please try again!");

@@ -21,6 +21,8 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        elevation: 0,
+        surfaceTintColor: const Color.fromRGBO(220, 195, 139, 1),
         backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
         title: const Text(
           'Savatcha',

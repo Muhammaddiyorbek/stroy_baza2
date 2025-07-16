@@ -6,6 +6,7 @@ import 'package:stroy_baza/models/auth_model.dart';
 
 class AuthRepository {
   static final AuthRepository _instance = AuthRepository._internal();
+
   factory AuthRepository() => _instance;
 
   late final Dio dio;
@@ -26,8 +27,7 @@ class AuthRepository {
     return _prefs!;
   }
 
-  Future<Map<String, dynamic>> sendPhoneNumber(
-      String phoneNumber, bool isLogin) async {
+  Future<Map<String, dynamic>> sendPhoneNumber(String phoneNumber, bool isLogin) async {
     try {
       final endpoint = isLogin ? '/api/api/login/phone/' : '/api/api/register/';
       final response = await dio.post(
@@ -36,26 +36,18 @@ class AuthRepository {
       );
 
       if (response.statusCode == 400) {
-        return {
-          'success': false,
-          'message': response.data['error'] ?? 'User already exists'
-        };
+        return {'success': false, 'message': response.data['error'] ?? 'User already exists'};
       }
 
       return {'success': true, 'data': response.data};
     } on DioException catch (e) {
-      return {
-        'success': false,
-        'message': e.response?.data['error'] ?? 'Something went wrong'
-      };
+      return {'success': false, 'message': e.response?.data['error'] ?? 'Something went wrong'};
     }
   }
 
-  Future<Map<String, dynamic>> verifyPhone(
-      String phoneNumber, String code, bool isLogin) async {
+  Future<Map<String, dynamic>> verifyPhone(String phoneNumber, String code, bool isLogin) async {
     try {
-      final endpoint =
-          isLogin ? '/api/api/login/phone/verify/' : '/api/api/verify/';
+      final endpoint = isLogin ? '/api/api/login/phone/verify/' : '/api/api/verify/';
       final response = await dio.post(
         endpoint,
         data: {'phone_number': phoneNumber, 'verification_code': code},
@@ -78,16 +70,9 @@ class AuthRepository {
       print("${authModel} 8 ${authModel.accessToken}");
       await _saveAuthData(authModel);
 
-      return {
-        'success': true,
-        'data': authModel,
-        'message': response.data['message'] ?? 'Verification successful'
-      };
+      return {'success': true, 'data': authModel, 'message': response.data['message'] ?? 'Verification successful'};
     } on DioException catch (e) {
-      return {
-        'success': false,
-        'message': e.response?.data['message'] ?? 'Verification failed'
-      };
+      return {'success': false, 'message': e.response?.data['message'] ?? 'Verification failed'};
     }
   }
 
@@ -99,10 +84,7 @@ class AuthRepository {
         if (!await isRefreshTokenValid()) {
           // Refresh token expired, logout user
           await clearAuthData();
-          return {
-            'success': false,
-            'message': 'Session expired. Please login again'
-          };
+          return {'success': false, 'message': 'Session expired. Please login again'};
         }
 
         // Try to refresh access token
@@ -142,10 +124,7 @@ class AuthRepository {
       if (!await isAccessTokenValid()) {
         if (!await isRefreshTokenValid()) {
           await clearAuthData();
-          return {
-            'success': false,
-            'message': 'Session expired. Please login again'
-          };
+          return {'success': false, 'message': 'Session expired. Please login again'};
         }
 
         final refreshResult = await refreshToken(await getRefreshToken() ?? '');
@@ -184,16 +163,10 @@ class AuthRepository {
         ));
         return {'success': true};
       } else {
-        return {
-          'success': false,
-          'message': response.data['message'] ?? 'Profile update failed'
-        };
+        return {'success': false, 'message': response.data['message'] ?? 'Profile update failed'};
       }
     } on DioException catch (e) {
-      return {
-        'success': false,
-        'message': e.response?.data['message'] ?? 'Something went wrong'
-      };
+      return {'success': false, 'message': e.response?.data['message'] ?? 'Something went wrong'};
     }
   }
 
@@ -209,10 +182,7 @@ class AuthRepository {
       await preferences.setString('access_token', newAccessToken);
       return {'success': true, 'data': newAccessToken};
     } on DioException catch (e) {
-      return {
-        'success': false,
-        'message': e.response?.data['message'] ?? 'Token refresh failed'
-      };
+      return {'success': false, 'message': e.response?.data['message'] ?? 'Token refresh failed'};
     }
   }
 
@@ -268,8 +238,7 @@ class AuthRepository {
       if (accessToken == null) return null;
 
       final decodedToken = JwtDecoder.decode(accessToken);
-      final expiryDate =
-          DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
+      final expiryDate = DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
 
       if (DateTime.now().isBefore(expiryDate)) {
         return accessToken;
@@ -278,8 +247,7 @@ class AuthRepository {
       // Access token expired, try to refresh
       final refreshResult = await refreshToken(await getRefreshToken() ?? '');
       if (refreshResult['success']) {
-        return preferences
-            .getString('access_token'); // Get new access token from storage
+        return preferences.getString('access_token'); // Get new access token from storage
       }
 
       return null;
@@ -295,8 +263,7 @@ class AuthRepository {
       if (refreshToken == null) return null;
 
       final decodedToken = JwtDecoder.decode(refreshToken);
-      final expiryDate =
-          DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
+      final expiryDate = DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
 
       if (DateTime.now().isBefore(expiryDate)) {
         return refreshToken;
@@ -327,8 +294,7 @@ class AuthRepository {
       if (accessToken == null) return false;
 
       final decodedToken = JwtDecoder.decode(accessToken);
-      final expiryDate =
-          DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
+      final expiryDate = DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
       final currentDate = DateTime.now();
 
       return currentDate.isBefore(expiryDate);
@@ -343,8 +309,7 @@ class AuthRepository {
       if (refreshToken == null) return false;
 
       final decodedToken = JwtDecoder.decode(refreshToken);
-      final expiryDate =
-          DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
+      final expiryDate = DateTime.fromMillisecondsSinceEpoch(decodedToken['exp'] * 1000);
       final currentDate = DateTime.now();
 
       return currentDate.isBefore(expiryDate);

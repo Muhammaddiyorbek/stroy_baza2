@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:stroy_baza/core/services/local_storage_helper.dart';
 import 'package:stroy_baza/core/services/network_service/api.dart';
 import 'package:stroy_baza/core/services/network_service/api_const.dart';
 import 'package:stroy_baza/models/banner_model.dart';
@@ -11,6 +12,8 @@ abstract class ProductRepository {
   Future<List<BannerModel>> getBanner();
 
   Future<Product?> getSingleProduct({required String id});
+
+  Future<bool> addBasket({required Product product});
 }
 
 class ProductRepositoryImpl extends ProductRepository {
@@ -49,6 +52,32 @@ class ProductRepositoryImpl extends ProductRepository {
       return product;
     } else {
       return null;
+    }
+  }
+
+  @override
+  Future<bool> addBasket({required Product product}) async {
+    final map = <String, dynamic>{
+      "product_variant_id": product.id,
+      "quantity": 2,
+      "price": "11 200",
+      "order": "vbnm",
+      "product_variant": "vhgjkl",
+    };
+    final token = StorageRepository.getString("token", defValue: '');
+    final header = <String, String>{"Authorization": "Bearer $token"};
+
+    log("Header $header");
+    final result = await ApiService.post(
+      ApiConst.apiOrderCreate,
+      map,
+      header: header,
+    );
+    log("result data: $result");
+    if (result != null && result.isNotEmpty) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

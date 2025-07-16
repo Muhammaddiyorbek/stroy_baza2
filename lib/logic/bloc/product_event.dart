@@ -1,11 +1,18 @@
 import 'package:equatable/equatable.dart';
 import 'package:stroy_baza/core/utils/enums.dart';
+import 'package:stroy_baza/models/product.dart';
 
 class ProductEvent extends Equatable {
   const ProductEvent();
 
   @override
   List<Object?> get props => const [];
+}
+
+class SaveBasket extends ProductEvent {
+  final Product product;
+
+  const SaveBasket(this.product);
 }
 
 class OrderEvent extends ProductEvent {

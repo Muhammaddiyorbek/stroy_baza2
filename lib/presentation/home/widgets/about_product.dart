@@ -120,9 +120,9 @@ class _AboutProductState extends State<AboutProduct> {
             final selectedVariant = selectedSize == null
                 ? currentVariants.first
                 : currentVariants.firstWhere(
-                  (v) => v.sizeUz == selectedSize,
-              orElse: () => currentVariants.first,
-            );
+                    (v) => v.sizeUz == selectedSize,
+                    orElse: () => currentVariants.first,
+                  );
             final sizes = currentVariants.map((v) => v.sizeUz).toSet().toList();
 
             return RefreshIndicator(
@@ -219,6 +219,41 @@ class _AboutProductState extends State<AboutProduct> {
                       ),
                       const SizedBox(height: 10),
                       const DeliveryInfoCard(),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 60,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
+                            disabledBackgroundColor: const Color.fromRGBO(220, 195, 139, 1), // Qo‘shildi
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            if (state.saveStatus != FormzSubmissionStatus.inProgress) {
+                              context.read<ProductBloc>().add(SaveBasket(state.singleProduct));
+                            }
+                          },
+                          child: state.saveStatus == FormzSubmissionStatus.inProgress
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                                  ),
+                                )
+                              : const Text(
+                                  "Savatchaga qo‘shish",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                        ),
+                      ),
                       const SizedBox(height: 20),
                     ],
                   ),

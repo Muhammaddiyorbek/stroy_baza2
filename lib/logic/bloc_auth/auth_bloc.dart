@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stroy_baza/core/services/local_storage_helper.dart';
 import 'package:stroy_baza/logic/repository/auth_repository.dart';
 import 'package:stroy_baza/models/auth_model.dart';
 
 part 'auth_event.dart';
+
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
@@ -16,11 +20,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<UpdateUserEvent>(_onUpdateUser);
   }
 
-  Future<void> _onSendPhone(
-      SendPhoneEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onSendPhone(SendPhoneEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    final result =
-        await repository.sendPhoneNumber(event.phoneNumber, event.isLogin);
+    final result = await repository.sendPhoneNumber(event.phoneNumber, event.isLogin);
 
     if (result['success']) {
       emit(CodeSentState(phoneNumber: event.phoneNumber));
@@ -29,11 +31,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onVerifyPhone(
-      VerifyPhoneEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onVerifyPhone(VerifyPhoneEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    final result = await repository.verifyPhone(
-        event.phoneNumber, event.code, event.isLogin);
+    final result = await repository.verifyPhone(event.phoneNumber, event.code, event.isLogin);
 
     if (result['success']) {
       final auth = result['data'] as AuthModel;
@@ -41,12 +41,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (event.isLogin) {
         final userResult = await repository.getUserInfo();
         if (userResult['success']) {
+          log("Storage repo save data: ${auth.accessToken}");
+          await StorageRepository.putString("token", "${auth.accessToken}");
+          await StorageRepository.putString("refresh", "${auth.refreshToken}");
+
           if (auth.accessToken == null || auth.refreshToken == null) {
             await repository.clearAuthData();
             emit(UnauthenticatedState());
             return;
           }
-          
+
           emit(AuthenticatedState(
             user: userResult['data'],
             accessToken: auth.accessToken!,
@@ -69,8 +73,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onCheckAuth(
-      CheckAuthEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onCheckAuth(CheckAuthEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     final isAuth = await repository.isAuthenticated();
     if (isAuth) {
@@ -103,8 +106,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(UnauthenticatedState());
   }
 
-  Future<void> _onUpdateUser(
-      UpdateUserEvent event, Emitter<AuthState> emit) async {
+  Future<void> _onUpdateUser(UpdateUserEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
     final result = await repository.updateUserProfile(
       firstName: event.firstName,

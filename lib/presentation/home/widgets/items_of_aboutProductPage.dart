@@ -1,7 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:stroy_baza/logic/bloc/product_bloc.dart';
+import 'package:stroy_baza/logic/bloc/product_event.dart';
+import 'package:stroy_baza/logic/bloc/product_state.dart';
 
 class AboutProductCarusel extends StatefulWidget {
   final List<String> images;
@@ -338,22 +343,6 @@ class DeliveryInfoCard extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        SizedBox(
-          width: double.infinity,
-          height: 60,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color.fromRGBO(220, 195, 139, 1),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            ),
-            onPressed: () {
-              //context.read<ProductBloc>().add(event)
-            },
-            child: const Text("Savatchaga qo‘shish",
-                style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.bold)),
-          ),
-        ),
-        const SizedBox(height: 36),
         Center(
           child: RichText(
             text: const TextSpan(

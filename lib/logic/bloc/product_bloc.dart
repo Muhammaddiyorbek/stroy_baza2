@@ -17,17 +17,29 @@ class ProductBloc extends Bloc<ProductEvent, ThisBlocState> {
       emit(state.copyWith(section: event.section));
       add(LoadProducts(event.section.branch));
     });
-
     on<SelectSize>((event, emit) {
       emit(state.copyWith(
         selectedSize: event.size,
         selectedColor: '', // O'lcham o'zgarsa rang reset bo'ladi
       ));
     });
-
     on<SelectColor>((event, emit) {
       emit(state.copyWith(selectedColor: event.color));
     });
+    on<SaveBasket>((event, emit) => _saveBasket(event, emit));
+  }
+
+  FutureOr<void> _saveBasket(SaveBasket event, Emitter<ThisBlocState> emit) async {
+    log("message 1");
+    emit(state.copyWith(saveStatus: FormzSubmissionStatus.inProgress));
+    final res = await repository.addBasket(product: event.product);
+    if (res) {
+      log("message 1== $res");
+      emit(state.copyWith(saveStatus: FormzSubmissionStatus.success));
+    } else {
+      log("message 1===$res");
+      emit(state.copyWith(saveStatus: FormzSubmissionStatus.failure));
+    }
   }
 
   FutureOr<void> _getSingleProducts(LoadProductById event, Emitter<ThisBlocState> emit) async {

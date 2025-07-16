@@ -9,6 +9,7 @@ final class ApiConst {
   static const String apiProduct = "/api/api/products/";
   static const String apiSingleProduct = "/api/api/products/";
   static const String apiBanner = "/api/api/banners/";
+  static const String apiOrderCreate = "/api/api/orders/create/";
 
 // Query parameters
   static final Map<String, String> param = {

@@ -12,6 +12,7 @@ class ThisBlocState extends Equatable {
   final FormzSubmissionStatus bannerStatus;
   final FormzSubmissionStatus productStatus;
   final FormzSubmissionStatus singleProductStatus;
+  final FormzSubmissionStatus saveStatus;
   final SectionEnum section;
 
   final String selectedSize;
@@ -20,6 +21,7 @@ class ThisBlocState extends Equatable {
   const ThisBlocState({
     this.section = SectionEnum.base,
     this.bannerStatus = FormzSubmissionStatus.initial,
+    this.saveStatus = FormzSubmissionStatus.initial,
     this.singleProductStatus = FormzSubmissionStatus.initial,
     this.productStatus = FormzSubmissionStatus.initial,
     this.errorMSg = '',
@@ -54,8 +56,10 @@ class ThisBlocState extends Equatable {
     FormzSubmissionStatus? singleProductStatus,
     String? selectedColor,
     String? selectedSize,
+    FormzSubmissionStatus? saveStatus,
   }) =>
       ThisBlocState(
+        saveStatus: saveStatus ?? this.saveStatus,
         section: section ?? this.section,
         banners: banners ?? this.banners,
         bannerStatus: bannerStatus ?? this.bannerStatus,
@@ -70,6 +74,7 @@ class ThisBlocState extends Equatable {
 
   @override
   List<Object?> get props => [
+        saveStatus,
         section,
         banners,
         products,
